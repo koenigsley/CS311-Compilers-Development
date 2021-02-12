@@ -1,7 +1,7 @@
 stages:
   - build
-  - simplelexer
   - lexer
+  - simplelexer
   - generatedlexer
   - descentparser
   - generatedparser
