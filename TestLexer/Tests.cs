@@ -133,6 +133,7 @@ namespace TestLexer
     }
 
     [TestFixture]
+    [Ignore("This test is disabled")]
     public class TestIntNotZeroLexer
     {
         [Test]
@@ -177,6 +178,7 @@ namespace TestLexer
     }
 
     [TestFixture]
+    [Ignore("This test is disabled")]
     public class TestLetterDigitLexer
     {
 
@@ -216,6 +218,7 @@ namespace TestLexer
 
 
     [TestFixture]
+    [Ignore("This test is disabled")]
     public class TestLetterListLexer
     {
         [Test]
@@ -278,6 +281,7 @@ namespace TestLexer
     }
 
     [TestFixture]
+    [Ignore("This test is disabled")]
     public class TestDigitListLexer
     {
         [Test]
@@ -326,6 +330,7 @@ namespace TestLexer
     }
 
     [TestFixture]
+    [Ignore("This test is disabled")]
     public class TestLetterDigitGroupLexer
     {
         [Test]
@@ -376,6 +381,7 @@ namespace TestLexer
     }
 
     [TestFixture]
+    [Ignore("This test is disabled")]
     public class TestDoubleLexer
     {
         public TestDoubleLexer()
@@ -418,6 +424,7 @@ namespace TestLexer
     }
 
     [TestFixture]
+    [Ignore("This test is disabled")]
     public class TestQuotedStringLexer
     {
 
@@ -453,6 +460,7 @@ namespace TestLexer
     }
 
     [TestFixture]
+    [Ignore("This test is disabled")]
     public class TestCommentLexer
     {
 
@@ -487,6 +495,7 @@ namespace TestLexer
 
     }
     
+    [Ignore("This test is disabled")]
     [TestFixture]
     public class TestIdChainLexer
     {
