@@ -2,6 +2,12 @@
 
 git clone --recurse-submodules <репозиторий> 
 
+Необходимы следующие NuGet пакеты:
+
+* NUnit
+* NUnit3TestAdapter
+* NUnit.ConsoleRunner
+
 ### Как запустить тесты из репозитория
 
 [Инструкция](https://github.com/czen/MMCS_CS311/wiki/Как-запустить-тесты-из-репозитория)
