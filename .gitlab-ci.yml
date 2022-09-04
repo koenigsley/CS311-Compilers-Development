@@ -17,105 +17,137 @@ build_all:
     - ./build.sh
   tags:
     - docker
-  #artifacts:
-  #  paths:
-  #    - ./NunitReportParser/bin/Debug/NunitReportParser.exe
-  #    - ./TestSimpleLexer/bin/Debug/TestSimpleLexer.dll
-  #    - ./TestLexer/bin/Debug/TestLexer.dll
-  #    - ./TestGeneratedLexer/bin/Debug/TestGeneratedLexer.dll
-  #    - ./TestDescentParser/bin/Debug/TestDescentParser.dll
-  #    - ./TestGeneratedParser/bin/Debug/TestGeneratedParser.dll
-  #    - ./TestASTParser/bin/Debug/TestASTParser.dll
-  #    - ./TestVisitors/bin/Debug/TestVisitors.dll
-  #    - ./TestCodeGenerator/bin/Debug/TestCodeGenerator.dll
+  artifacts:
+    paths:
+      - ./NunitReportParser/bin/Debug/NunitReportParser.exe
+      - ./TestSimpleLexer/bin/Debug/TestSimpleLexer.dll
+      - ./TestLexer/bin/Debug/TestLexer.dll
+      - ./TestGeneratedLexer/bin/Debug/TestGeneratedLexer.dll
+      - ./TestDescentParser/bin/Debug/TestDescentParser.dll
+      - ./TestGeneratedParser/bin/Debug/TestGeneratedParser.dll
+      - ./TestASTParser/bin/Debug/TestASTParser.dll
+      - ./TestVisitors/bin/Debug/TestVisitors.dll
+      - ./TestCodeGenerator/bin/Debug/TestCodeGenerator.dll
   #  expire_in: 1 week
 
 
 testsimplelexer:
   stage: simplelexer
   image: czen/ubuntu_xbuild
+  allow_failure: true
   script:
     - ./prebuild.sh
     - ./build.sh
-    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestSimpleLexer/bin/Debug/TestSimpleLexer.dll
+    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestSimpleLexer/bin/Debug/TestSimpleLexer.dll || FAILED=true
     - mono NunitReportParser/bin/Debug/NunitReportParser.exe ${CI_PROJECT_DIR} ${GITLAB_USER_LOGIN}
+    - if [ $FAILED ]
+    -     then false
+    - fi
   tags:
     - docker
   
 testlexer:
   stage: lexer
   image: czen/ubuntu_xbuild
+  allow_failure: true
   script:
     - ./prebuild.sh
     - ./build.sh
-    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestLexer/bin/Debug/TestLexer.dll
+    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestLexer/bin/Debug/TestLexer.dll || FAILED=true
     - mono NunitReportParser/bin/Debug/NunitReportParser.exe ${CI_PROJECT_DIR} ${GITLAB_USER_LOGIN}
+    - if [ $FAILED ]
+    -     then false
+    - fi
   tags:
     - docker
 
 testgeneratedlexer:
   stage: generatedlexer
   image: czen/ubuntu_xbuild
+  allow_failure: true
   script:
     - ./prebuild.sh
     - ./build.sh
-    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestGeneratedLexer/bin/Debug/TestGeneratedLexer.dll
+    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestGeneratedLexer/bin/Debug/TestGeneratedLexer.dll || FAILED=true
     - mono NunitReportParser/bin/Debug/NunitReportParser.exe ${CI_PROJECT_DIR} ${GITLAB_USER_LOGIN}
+    - if [ $FAILED ]
+    -     then false
+    - fi
   tags:
     - docker    
 
 testdescentparser:
   stage: descentparser
   image: czen/ubuntu_xbuild
+  allow_failure: true
   script:
     - ./prebuild.sh
     - ./build.sh
-    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestDescentParser/bin/Debug/TestDescentParser.dll
+    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestDescentParser/bin/Debug/TestDescentParser.dll || FAILED=true
     - mono NunitReportParser/bin/Debug/NunitReportParser.exe ${CI_PROJECT_DIR} ${GITLAB_USER_LOGIN}
+    - if [ $FAILED ]
+    -     then false
+    - fi
   tags:
     - docker        
 
 testgeneratedparser:
   stage: generatedparser
   image: czen/ubuntu_xbuild
+  allow_failure: true
   script:
     - ./prebuild.sh
     - ./build.sh
-    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestGeneratedParser/bin/Debug/TestGeneratedParser.dll
+    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestGeneratedParser/bin/Debug/TestGeneratedParser.dll || FAILED=true
     - mono NunitReportParser/bin/Debug/NunitReportParser.exe ${CI_PROJECT_DIR} ${GITLAB_USER_LOGIN}
+    - if [ $FAILED ]
+    -     then false
+    - fi
   tags:
     - docker            
 
 testastparser:
   stage: astparser
   image: czen/ubuntu_xbuild
+  allow_failure: true
   script:
     - ./prebuild.sh
     - ./build.sh
-    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestASTParser/bin/Debug/TestASTParser.dll
+    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestASTParser/bin/Debug/TestASTParser.dll || FAILED=true
     - mono NunitReportParser/bin/Debug/NunitReportParser.exe ${CI_PROJECT_DIR} ${GITLAB_USER_LOGIN}
+    - if [ $FAILED ]
+    -     then false
+    - fi
   tags:
     - docker                
 
 testvisitors:
   stage: visitors
   image: czen/ubuntu_xbuild
+  allow_failure: true
   script:
     - ./prebuild.sh
     - ./build.sh
-    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestVisitors/bin/Debug/TestVisitors.dll
+    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestVisitors/bin/Debug/TestVisitors.dll || FAILED=true
     - mono NunitReportParser/bin/Debug/NunitReportParser.exe ${CI_PROJECT_DIR} ${GITLAB_USER_LOGIN}
+    - if [ $FAILED ]
+    -     then false
+    - fi
   tags:
     - docker                
 
 testcodegenerator:
   stage: codegenerator
   image: czen/ubuntu_xbuild
+  allow_failure: true
   script:
     - ./prebuild.sh
     - ./build.sh
-    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestCodeGenerator/bin/Debug/TestCodeGenerator.dll
+    - mono packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe --labels=ON TestCodeGenerator/bin/Debug/TestCodeGenerator.dll || FAILED=true
     - mono NunitReportParser/bin/Debug/NunitReportParser.exe ${CI_PROJECT_DIR} ${GITLAB_USER_LOGIN}
+    - if [ $FAILED ]
+    -     then false
+    - fi
   tags:
     - docker                    
   
