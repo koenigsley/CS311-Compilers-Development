@@ -10,7 +10,7 @@ git clone --recurse-submodules <репозиторий>
 
 ### Как запустить тесты из репозитория
 
-[Инструкция](https://github.com/czen/MMCS_CS311/wiki/Как-запустить-тесты-из-репозитория)
+[Инструкция](http://gitlab.mmcs.sfedu.ru/mmcs/Compilers/-/wikis/%D0%9A%D0%B0%D0%BA_%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D1%82%D0%B8%D1%82%D1%8C_%D1%82%D0%B5%D1%81%D1%82%D1%8B_%D0%B8%D0%B7_%D1%80%D0%B5%D0%BF%D0%BE%D0%B7%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D1%8F)
 
 ### Учебная карта дисциплины
 
