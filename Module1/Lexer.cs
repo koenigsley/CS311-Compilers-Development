@@ -55,9 +55,9 @@ namespace Lexer
 
     public class IntLexer : Lexer
     {
-
         protected System.Text.StringBuilder intString;
         public int parseResult = 0;
+        private int sign = 1, power = 1;
 
         public IntLexer(string input)
             : base(input)
@@ -67,14 +67,19 @@ namespace Lexer
 
         public override bool Parse()
         {
+            Reset();
+
             NextCh();
             if (currentCh == '+' || currentCh == '-')
             {
+                if (currentCh == '-')
+                    sign = -1;
                 NextCh();
             }
         
             if (char.IsDigit(currentCh))
             {
+                AddDigit();
                 NextCh();
             }
             else
@@ -84,17 +89,32 @@ namespace Lexer
 
             while (char.IsDigit(currentCh))
             {
+                AddDigit();
                 NextCh();
             }
-
 
             if (currentCharValue != -1)
             {
                 Error();
             }
 
-            return true;
+            parseResult *= sign;
 
+            return true;
+        }
+
+        private void Reset()
+        {
+            parseResult = 0;
+            sign = 1;
+            power = 1;
+        }
+
+        private void AddDigit()
+        {
+            parseResult *= power;
+            parseResult += (currentCh - '0');
+            power *= 10;
         }
     }
     
