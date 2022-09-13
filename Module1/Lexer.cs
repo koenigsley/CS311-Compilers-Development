@@ -242,11 +242,11 @@ namespace Lexer
     public class LetterListLexer : Lexer
     {
         protected List<char> parseResult;
-
         public List<char> ParseResult
         {
             get { return parseResult; }
         }
+        private bool takeLetter = true;
 
         public LetterListLexer(string input)
             : base(input)
@@ -256,7 +256,51 @@ namespace Lexer
 
         public override bool Parse()
         {
-            throw new NotImplementedException();
+            NextCh();
+
+            while(IsLetterOrDelimiter(currentCh))
+            {
+                if (IsCurrentCharValid())
+                {
+                    if (char.IsLetter(currentCh))
+                    {
+                        parseResult.Add(currentCh);
+                    }
+                    NextCh();
+                }
+                else
+                {
+                    Error();
+                }
+                takeLetter = !takeLetter;
+            }
+
+            EnsureCompletelyParsed();
+
+            return true;
+        }
+
+        protected new void EnsureCompletelyParsed()
+        {
+            if (currentCharValue != -1 || takeLetter)
+            {
+                Error();
+            }
+        }
+
+        private static bool IsLetterOrDelimiter(char c)
+        {
+            return char.IsLetter(c) || IsDelimiter(c);
+        }
+
+        private bool IsCurrentCharValid()
+        {
+            return takeLetter ? char.IsLetter(currentCh) : IsDelimiter(currentCh);
+        }
+
+        private static bool IsDelimiter(char c)
+        {
+            return c == ',' || c == ';';
         }
     }
 
