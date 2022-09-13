@@ -230,6 +230,8 @@ namespace Lexer
 
             EnsureCompletelyParsed();
 
+            parseResult = builder.ToString();
+
             return true;
         }
 
