@@ -60,19 +60,19 @@ namespace TestLexer
         {
             IntLexer lInt = new IntLexer("12");
             Assert.IsTrue(lInt.Parse());
-            Assert.AreEqual(lInt.parseResult, 12, "Не собирает число 12");
+            Assert.AreEqual(12, lInt.parseResult, "Не собирает число 12");
 
             lInt = new IntLexer("-12");
             Assert.IsTrue(lInt.Parse());
-            Assert.AreEqual(lInt.parseResult, -12, "Не собирает число -12");
+            Assert.AreEqual(-12, lInt.parseResult, "Не собирает число -12");
 
             lInt = new IntLexer("+12");
             Assert.IsTrue(lInt.Parse());
-            Assert.AreEqual(lInt.parseResult, 12, "Не собирает число +12");
+            Assert.AreEqual(12, lInt.parseResult, "Не собирает число +12");
 
             lInt = new IntLexer("+0");
             Assert.IsTrue(lInt.Parse());
-            Assert.AreEqual(lInt.parseResult, 0, "Не собирает число +0");
+            Assert.AreEqual(0, lInt.parseResult, "Не собирает число +0");
         }
     }
 
