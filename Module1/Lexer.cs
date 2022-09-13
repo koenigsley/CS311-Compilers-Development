@@ -94,12 +94,11 @@ namespace Lexer
             }
         }
 
-        protected void ParseFirstDigit()
+        protected virtual void ParseFirstDigit()
         {
             if (char.IsDigit(currentCh))
             {
                 parseResult = currentInt;
-                NextCh();
             }
             else
             {
@@ -109,6 +108,7 @@ namespace Lexer
 
         protected void ParseRestDigits()
         {
+            NextCh();
             while (char.IsDigit(currentCh))
             {
                 parseResult = parseResult * 10 + currentInt;
@@ -183,7 +183,7 @@ namespace Lexer
         {
         }
 
-        protected new void ParseFirstDigit()
+        protected override void ParseFirstDigit()
         {
             base.ParseFirstDigit();
             if (currentCh == '0')
@@ -402,8 +402,8 @@ namespace Lexer
     {
         public static void Main()
         {
-            string input = "154216";
-            Lexer L = new IntLexer(input);
+            string input = "0154216";
+            Lexer L = new IntNoZeroLexer(input);
             try
             {
                 L.Parse();
