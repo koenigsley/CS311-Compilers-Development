@@ -7,18 +7,16 @@ using System.Linq;
 namespace Lexer
 {
 
-    public class LexerException : System.Exception
+    public class LexerException : Exception
     {
         public LexerException(string msg)
             : base(msg)
         {
         }
-
     }
 
     public class Lexer
     {
-
         protected int position;
         protected char currentCh; // очередной считанный символ
         protected int currentCharValue; // целое значение очередного считанного символа
@@ -33,7 +31,7 @@ namespace Lexer
 
         public void Error()
         {
-            System.Text.StringBuilder o = new System.Text.StringBuilder();
+            var o = new StringBuilder();
             o.Append(inputString + '\n');
             o.Append(new System.String(' ', position - 1) + "^\n");
             o.AppendFormat("Error in symbol {0}", currentCh);
@@ -42,75 +40,88 @@ namespace Lexer
 
         protected void NextCh()
         {
-            this.currentCharValue = this.inputReader.Read();
-            this.currentCh = (char) currentCharValue;
-            this.position += 1;
+            currentCharValue = inputReader.Read();
+            currentCh = (char)currentCharValue;
+            position += 1;
         }
 
         public virtual bool Parse()
         {
             return true;
         }
+
+        protected void EnsureCompletelyParsed()
+        {
+            if (currentCharValue != -1)
+            {
+                Error();
+            }
+        }
     }
 
     public class IntLexer : Lexer
     {
         protected StringBuilder intString;
-        public int parseResult;
-        private int currentDigit { 
-            get { return currentCh - '0'; } 
+        public int parseResult = 0;
+        protected bool negative = false;
+        private int currentInt
+        {
+            get { return currentCh - '0'; }
         }
 
         public IntLexer(string input) : base(input)
         {
-            parseResult = 0;
             intString = new StringBuilder();
         }
 
         public override bool Parse()
         {
-            parseResult = 0;
-            bool negative = false;
+            ParseSign();
+            ParseFirstDigit();
+            ParseRestDigits();
+            EnsureCompletelyParsed();
+            NegateIfNeeded();
+            return true;
+        }
 
+        protected void ParseSign()
+        {
             NextCh();
             if (currentCh == '+' || currentCh == '-')
             {
                 negative = currentCh == '-';
                 NextCh();
             }
-        
+        }
+
+        protected void ParseFirstDigit()
+        {
             if (char.IsDigit(currentCh))
             {
-                parseResult = currentDigit;
+                parseResult = currentInt;
                 NextCh();
             }
             else
             {
                 Error();
             }
+        }
 
+        protected void ParseRestDigits()
+        {
             while (char.IsDigit(currentCh))
             {
-                parseResult *= 10 + currentDigit;
+                parseResult = parseResult * 10 + currentInt;
                 NextCh();
             }
+        }
 
-            if (currentCharValue != -1)
-            {
-                Error();
-            }
-
+        protected void NegateIfNeeded()
+        {
             if (negative)
             {
                 parseResult = -parseResult;
             }
-
-            return true;
-        }
-
-        private void Reset()
-        {
-            parseResult = 0;
         }
     }
     
@@ -131,21 +142,54 @@ namespace Lexer
 
         public override bool Parse()
         { 
-            throw new NotImplementedException();
+            NextCh();
+            if (IsUnderscoreOrLetter(currentCh))
+            {
+                builder.Append(currentCh);
+                NextCh();
+            }
+            else
+            {
+                Error();
+            }
+
+            while (IsUnderscoreOrLetterOrDigit(currentCh))
+            {
+                builder.Append(currentCh);
+                NextCh();
+            }
+
+            EnsureCompletelyParsed();
+
+            parseResult = builder.ToString();
+
+            return true;
         }
-       
+
+        private static bool IsUnderscoreOrLetter(char c)
+        {
+            return c == '_' || char.IsLetter(c);
+        }
+
+        private static bool IsUnderscoreOrLetterOrDigit(char c)
+        {
+            return IsUnderscoreOrLetter(c) || char.IsDigit(c);
+        }
     }
 
     public class IntNoZeroLexer : IntLexer
     {
-        public IntNoZeroLexer(string input)
-            : base(input)
+        public IntNoZeroLexer(string input) : base(input)
         {
         }
 
-        public override bool Parse()
+        protected new void ParseFirstDigit()
         {
-            throw new NotImplementedException();
+            base.ParseFirstDigit();
+            if (currentCh == '0')
+            {
+                Error();
+            }
         }
     }
 
