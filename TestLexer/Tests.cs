@@ -216,7 +216,6 @@ namespace TestLexer
 
 
     [TestFixture]
-    [Ignore("This test is disabled")]
     public class TestLetterListLexer
     {
         [Test]
