@@ -197,6 +197,7 @@ namespace Lexer
     {
         protected StringBuilder builder;
         protected string parseResult;
+        private bool takeLetter = true;
 
         public string ParseResult
         {
@@ -211,9 +212,31 @@ namespace Lexer
 
         public override bool Parse()
         {
-            throw new NotImplementedException();
+            NextCh();
+
+            while (char.IsLetterOrDigit(currentCh))
+            {
+                if (IsCurrentCharValid())
+                {
+                    builder.Append(currentCh);
+                    NextCh();
+                }
+                else
+                {
+                    Error();
+                }
+                takeLetter = !takeLetter;
+            }
+
+            EnsureCompletelyParsed();
+
+            return true;
         }
-       
+
+        private bool IsCurrentCharValid()
+        {
+            return takeLetter ? char.IsLetter(currentCh) : char.IsDigit(currentCh);
+        }
     }
 
     public class LetterListLexer : Lexer
