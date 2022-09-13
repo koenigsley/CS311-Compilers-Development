@@ -55,31 +55,33 @@ namespace Lexer
 
     public class IntLexer : Lexer
     {
-        protected System.Text.StringBuilder intString;
-        public int parseResult = 0;
-        private int sign = 1, power = 1;
+        protected StringBuilder intString;
+        public int parseResult;
+        private int currentDigit { 
+            get { return currentCh - '0'; } 
+        }
 
-        public IntLexer(string input)
-            : base(input)
+        public IntLexer(string input) : base(input)
         {
-            intString = new System.Text.StringBuilder();
+            parseResult = 0;
+            intString = new StringBuilder();
         }
 
         public override bool Parse()
         {
-            Reset();
+            parseResult = 0;
+            bool negative = false;
 
             NextCh();
             if (currentCh == '+' || currentCh == '-')
             {
-                if (currentCh == '-')
-                    sign = -1;
+                negative = currentCh == '-';
                 NextCh();
             }
         
             if (char.IsDigit(currentCh))
             {
-                AddDigit();
+                parseResult = currentDigit;
                 NextCh();
             }
             else
@@ -89,7 +91,7 @@ namespace Lexer
 
             while (char.IsDigit(currentCh))
             {
-                AddDigit();
+                parseResult *= 10 + currentDigit;
                 NextCh();
             }
 
@@ -98,7 +100,10 @@ namespace Lexer
                 Error();
             }
 
-            parseResult *= sign;
+            if (negative)
+            {
+                parseResult = -parseResult;
+            }
 
             return true;
         }
@@ -106,15 +111,6 @@ namespace Lexer
         private void Reset()
         {
             parseResult = 0;
-            sign = 1;
-            power = 1;
-        }
-
-        private void AddDigit()
-        {
-            parseResult *= power;
-            parseResult += (currentCh - '0');
-            power *= 10;
         }
     }
     
