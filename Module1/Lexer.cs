@@ -284,7 +284,8 @@ namespace Lexer
 
         protected new void EnsureCompletelyParsed()
         {
-            if (currentCharValue != -1 || takeLetter)
+            base.EnsureCompletelyParsed();
+            if (takeLetter)
             {
                 Error();
             }
@@ -309,21 +310,74 @@ namespace Lexer
     public class DigitListLexer : Lexer
     {
         protected List<int> parseResult;
+        private bool digitTaken = true;
+        private int currentInt
+        {
+            get { return currentCh - '0'; }
+        }
 
         public List<int> ParseResult
         {
             get { return parseResult; }
         }
 
-        public DigitListLexer(string input)
-            : base(input)
+        public DigitListLexer(string input) : base(input)
         {
             parseResult = new List<int>();
         }
 
         public override bool Parse()
         {
-            throw new NotImplementedException();
+            ParseFirstChar();
+            ParseRestChars();
+            EnsureCompletelyParsed();
+            return true;
+        }
+
+        protected void ParseFirstChar()
+        {
+            NextCh();
+            if (char.IsDigit(currentCh))
+            {
+                parseResult.Add(currentInt);
+                digitTaken = true;
+                NextCh();
+            }
+            else
+            {
+                Error();
+            }
+        }
+
+        protected void ParseRestChars()
+        {
+            while (char.IsDigit(currentCh) || char.IsWhiteSpace(currentCh))
+            {
+                if (char.IsWhiteSpace(currentCh))
+                {
+                    digitTaken = false;
+                }
+                else
+                {
+                    if (digitTaken)
+                    {
+                        Error();
+                    }
+
+                    parseResult.Add(currentInt);
+                    digitTaken = true;
+                }
+                NextCh();
+            }
+        }
+
+        protected new void EnsureCompletelyParsed()
+        {
+            base.EnsureCompletelyParsed();
+            if (!digitTaken)
+            {
+                Error();
+            }
         }
     }
 
@@ -448,8 +502,8 @@ namespace Lexer
     {
         public static void Main()
         {
-            string input = "0154216";
-            Lexer L = new IntNoZeroLexer(input);
+            string input = "154216";
+            Lexer L = new IntLexer(input);
             try
             {
                 L.Parse();
