@@ -285,18 +285,18 @@ namespace TestLexer
         {
             DigitListLexer l = new DigitListLexer("1 2");
             Assert.IsTrue(l.Parse(), "Не пропускает 1 2");
-            Assert.AreEqual(l.ParseResult.Count, 2, "неправильно собран список-результат");
+            Assert.AreEqual(2, l.ParseResult.Count, "неправильно собран список-результат");
             Assert.Contains(1, l.ParseResult);
             Assert.Contains(2, l.ParseResult);
 
             l = new DigitListLexer("1");
             Assert.IsTrue(l.Parse(), "Не пропускает 1");
-            Assert.AreEqual(l.ParseResult.Count, 1, "неправильно собран список-результат");
+            Assert.AreEqual(1, l.ParseResult.Count, "неправильно собран список-результат");
             Assert.Contains(1, l.ParseResult);
 
             l = new DigitListLexer("5    6");
             Assert.IsTrue(l.Parse(), "Не пропускает 5    6");
-            Assert.AreEqual(l.ParseResult.Count, 2, "неправильно собран список-результат");
+            Assert.AreEqual(2, l.ParseResult.Count, "неправильно собран список-результат");
             Assert.Contains(5, l.ParseResult);
             Assert.Contains(6, l.ParseResult);
         }
