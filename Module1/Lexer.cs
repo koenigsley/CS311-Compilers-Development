@@ -545,11 +545,11 @@ namespace Lexer
     {
         private StringBuilder builder;
         private string parseResult;
+        private bool metClosingSingleQuote = false;
 
         public string ParseResult
         {
             get { return parseResult; }
-
         }
 
         public StringLexer(string input)
@@ -560,7 +560,37 @@ namespace Lexer
 
         public override bool Parse()
         {
-            throw new NotImplementedException();
+            NextCh();
+
+            if (currentCh == '\'')
+            {
+                builder.Append(currentCh);
+                NextCh();
+            }
+            else
+            {
+                Error();
+            }
+
+            while (currentCharValue != -1 && !metClosingSingleQuote)
+            {
+                builder.Append(currentCh);
+                metClosingSingleQuote = currentCh == '\'';
+                NextCh();
+            }
+
+            EnsureCompletelyParsed();
+
+            return true;
+        }
+
+        protected new void EnsureCompletelyParsed()
+        {
+            base.EnsureCompletelyParsed();
+            if (!metClosingSingleQuote)
+            {
+                Error();
+            }
         }
     }
 
