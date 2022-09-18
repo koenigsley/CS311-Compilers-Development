@@ -487,7 +487,6 @@ namespace TestLexer
 
     }
     
-    [Ignore("This test is disabled")]
     [TestFixture]
     public class TestIdChainLexer
     {
