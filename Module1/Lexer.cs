@@ -598,6 +598,8 @@ namespace Lexer
     {
         private StringBuilder builder;
         private string parseResult;
+        private bool metClosingAsterisk = false;
+        private bool metClosingSlash = false;
 
         public string ParseResult
         {
@@ -613,7 +615,59 @@ namespace Lexer
 
         public override bool Parse()
         {
-            throw new NotImplementedException();
+            NextCh();
+
+            if (currentCh == '/')
+            {
+                builder.Append(currentCh);
+                NextCh();
+            }
+            else
+            {
+                Error();
+            }
+
+            if (currentCh == '*')
+            {
+                builder.Append(currentCh);
+                NextCh();
+            }
+            else
+            {
+                Error();
+            }
+
+            while (currentCharValue != -1 && !(metClosingAsterisk && metClosingSlash))
+            {
+                if (currentCh == '*')
+                {
+                    metClosingAsterisk = true;
+                } 
+                else if (currentCh == '/')
+                {
+                    metClosingSlash = true;
+                } 
+                else
+                {
+                    metClosingAsterisk = false;
+                    metClosingSlash = false;
+                }
+                builder.Append(currentCh);
+                NextCh();
+            }
+
+            EnsureCompletelyParsed();
+
+            return true;
+        }
+
+        protected new void EnsureCompletelyParsed()
+        {
+            base.EnsureCompletelyParsed();
+            if (!metClosingAsterisk || !metClosingSlash)
+            {
+                Error();
+            }
         }
     }
 
