@@ -523,7 +523,9 @@ namespace TestLexer
             
             l = new IdentChainLexer("uUd,sa");
             Assert.Throws<LexerException>(() => { l.Parse(); }, "Пропускает uUd,sa");
-            
+
+            l = new IdentChainLexer("");
+            Assert.Throws<LexerException>(() => { l.Parse(); }, "Пропускает пустую строку");
         }
     }
 }
