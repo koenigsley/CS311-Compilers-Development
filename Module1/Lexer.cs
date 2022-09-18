@@ -469,6 +469,7 @@ namespace Lexer
     {
         private StringBuilder builder;
         private double parseResult;
+        private bool readDot = false;
 
         public double ParseResult
         {
@@ -484,9 +485,60 @@ namespace Lexer
 
         public override bool Parse()
         {
-            throw new NotImplementedException();
+            ParseFirstDigit();
+            ParseDigitsUntilDot();
+            ParseRestDigits();
+            EnsureCompletelyParsed();
+
+            parseResult = double.Parse(builder.ToString());
+
+            return true;
+        }
+
+        private void ParseFirstDigit()
+        {
+            NextCh();
+            ParseDigit();
         }
        
+        private void ParseDigit()
+        {
+            if (char.IsDigit(currentCh))
+            {
+                builder.Append(currentCh);
+                NextCh();
+            }
+            else
+            {
+                Error();
+            }
+        }
+
+        private void ParseDigitsUntilDot()
+        {
+            while ((char.IsDigit(currentCh) || currentCh == '.') && !readDot)
+            {
+                builder.Append(currentCh);
+                readDot = currentCh == '.';
+                NextCh();
+            }
+        }
+
+        private void ParseRestDigits()
+        {
+            if (!readDot)
+            {
+                return;
+            }
+
+            ParseDigit();
+
+            while (char.IsDigit(currentCh))
+            {
+                builder.Append(currentCh);
+                NextCh();
+            }
+        }
     }
 
     public class StringLexer : Lexer
