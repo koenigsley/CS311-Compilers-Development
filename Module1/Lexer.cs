@@ -143,7 +143,7 @@ namespace Lexer
         public override bool Parse()
         { 
             NextCh();
-            if (IsUnderscoreOrLetter(currentCh))
+            if (currentCh.IsUnderscoreOrLetter())
             {
                 builder.Append(currentCh);
                 NextCh();
@@ -153,7 +153,7 @@ namespace Lexer
                 Error();
             }
 
-            while (IsUnderscoreOrLetterOrDigit(currentCh))
+            while (currentCh.IsUnderscoreOrLetterOrDigit())
             {
                 builder.Append(currentCh);
                 NextCh();
@@ -165,13 +165,16 @@ namespace Lexer
 
             return true;
         }
+    }
 
-        private static bool IsUnderscoreOrLetter(char c)
+    public static class CharExtensionMethods
+    {
+        public static bool IsUnderscoreOrLetter(this char c)
         {
             return c == '_' || char.IsLetter(c);
         }
 
-        private static bool IsUnderscoreOrLetterOrDigit(char c)
+        public static bool IsUnderscoreOrLetterOrDigit(this char c)
         {
             return IsUnderscoreOrLetter(c) || char.IsDigit(c);
         }
@@ -604,7 +607,6 @@ namespace Lexer
         public string ParseResult
         {
             get { return parseResult; }
-
         }
 
         public CommentLexer(string input)
@@ -675,15 +677,14 @@ namespace Lexer
     {
         private StringBuilder builder;
         private List<string> parseResult;
+        private bool lastCharIsDot = false;
 
         public List<string> ParseResult
         {
             get { return parseResult; }
-
         }
 
-        public IdentChainLexer(string input)
-            : base(input)
+        public IdentChainLexer(string input) : base(input)
         {
             builder = new StringBuilder();
             parseResult = new List<string>();
@@ -691,7 +692,53 @@ namespace Lexer
 
         public override bool Parse()
         {
-            throw new NotImplementedException();
+            NextCh();
+            do
+            {
+                ParseIdent();
+            } 
+            while (currentCharValue != -1);
+
+            EnsureCompletelyParsed();
+
+            return true;
+        }
+
+        private void ParseIdent()
+        {
+            if (currentCh.IsUnderscoreOrLetter())
+            {
+                lastCharIsDot = false;
+                builder.Append(currentCh);
+                NextCh();
+            }
+            else
+            {
+                Error();
+            }
+
+            while (currentCh.IsUnderscoreOrLetterOrDigit())
+            {
+                builder.Append(currentCh);
+                NextCh();
+            }
+
+            if (currentCh == '.')
+            {
+                lastCharIsDot = true;
+                parseResult.Add(builder.ToString());
+                builder = new StringBuilder();
+                NextCh();
+            }
+        }
+
+        protected new void EnsureCompletelyParsed()
+        {
+            base.EnsureCompletelyParsed();
+            if (lastCharIsDot)
+            {
+                Error();
+            }
         }
     }
 
