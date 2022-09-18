@@ -385,12 +385,16 @@ namespace Lexer
     {
         protected StringBuilder builder;
         protected string parseResult;
+        private int lettersCountBeforeCurrentChar = 0, digitsCountBeforeCurrentChar = 0;
+        private bool previousWasLetter = false;
+        private const int MaxCharsCountBeforeCurrentChar = 2;  
 
         public string ParseResult
         {
             get { return parseResult; }
         }
-        
+
+
         public LetterDigitGroupLexer(string input)
             : base(input)
         {
@@ -399,9 +403,66 @@ namespace Lexer
 
         public override bool Parse()
         {
-            throw new NotImplementedException();
+            NextCh();
+
+            if (char.IsLetter(currentCh))
+            {
+                lettersCountBeforeCurrentChar++;
+                builder.Append(currentCh);
+                NextCh();
+                previousWasLetter = true;
+            }
+            else
+            {
+                Error();
+            }
+
+            while (char.IsLetterOrDigit(currentCh))
+            {
+                if (char.IsDigit(currentCh))
+                {
+                    if (digitsCountBeforeCurrentChar < MaxCharsCountBeforeCurrentChar)
+                    {
+                        if (previousWasLetter)
+                        {
+                            lettersCountBeforeCurrentChar = 0;
+                        }
+                        digitsCountBeforeCurrentChar++;
+                        builder.Append(currentCh);
+                        NextCh();
+                        previousWasLetter = false;
+                    }
+                    else
+                    {
+                        Error();
+                    }
+                }
+                else
+                {
+                    if (lettersCountBeforeCurrentChar < MaxCharsCountBeforeCurrentChar)
+                    {
+                        if (!previousWasLetter)
+                        {
+                            digitsCountBeforeCurrentChar = 0;
+                        }
+                        lettersCountBeforeCurrentChar++;
+                        builder.Append(currentCh);
+                        NextCh();
+                        previousWasLetter = true;
+                    }
+                    else
+                    {
+                        Error();
+                    }
+                }
+            }
+
+            EnsureCompletelyParsed();
+
+            parseResult = builder.ToString();
+
+            return true;
         }
-       
     }
 
     public class DoubleLexer : Lexer
