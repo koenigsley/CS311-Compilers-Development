@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using Lexer;
+using System.Collections.Generic;
 
 namespace TestLexer
 {
@@ -493,14 +494,20 @@ namespace TestLexer
         [Test]
         public void TestIdChainParse()
         {
-            IdentChainLexer l = new IdentChainLexer("Id1");
+            var l = new IdentChainLexer("Id1");
             Assert.IsTrue(l.Parse(), "Не пропускает Id1");
-            
+            var expected = new List<string> { "Id1" };
+            Assert.AreEqual(expected, l.ParseResult, "Неправильно собран Id1");
+
             l = new IdentChainLexer("Id1.Id2");
             Assert.IsTrue(l.Parse(), "Не пропускает Id1.Id2");
-            
+            expected = new List<string> { "Id1", "Id2" };
+            Assert.AreEqual(expected, l.ParseResult, "Неправильно собран Id1.Id2");
+
             l = new IdentChainLexer("uUd.k_22.sa3");
             Assert.IsTrue(l.Parse(), "Не пропускает uUd.k_22.sa3");
+            expected = new List<string> { "uUd", "k_22", "sa3" };
+            Assert.AreEqual(expected, l.ParseResult, "Неправильно собран uUd.k_22.sa3");
         }
         
         [Test]
