@@ -460,14 +460,20 @@ namespace TestLexer
         [Test]
         public void TestCommentParse()
         {
-            CommentLexer l = new CommentLexer("/**/");
+            var l = new CommentLexer("/**/");
             Assert.IsTrue(l.Parse(), "Не пропускает /**/");
+            var expected = "/**/";
+            Assert.AreEqual(expected, l.ParseResult, "Неправильно собран /**/");
 
             l = new CommentLexer("/*as3 @4&*_ -dd %~f*/");
             Assert.IsTrue(l.Parse(), "Не пропускает /*as3 @4&*_ -dd %~f*/");
+            expected = "/*as3 @4&*_ -dd %~f*/";
+            Assert.AreEqual(expected, l.ParseResult, "Неправильно собран /*as3 @4&*_ -dd %~f*/");
 
             l = new CommentLexer("/*asda \n */");
             Assert.IsTrue(l.Parse(), "Не пропускает перенос строки");
+            expected = "/*asda \n */";
+            Assert.AreEqual(expected, l.ParseResult, "Неправильно собран /*asda \n */");
         }
 
         [Test]
