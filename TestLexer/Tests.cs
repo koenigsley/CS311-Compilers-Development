@@ -425,14 +425,20 @@ namespace TestLexer
         [Test]
         public void TestQuotedStringParse()
         {
-            StringLexer l = new StringLexer("''");
+            var l = new StringLexer("''");
             Assert.IsTrue(l.Parse(), "Не пропускает ''");
+            var expected = "''";
+            Assert.AreEqual(expected, l.ParseResult, $"Неправильно собран {expected}");
 
             l = new StringLexer("'aa#2N3@_3-x//45'");
             Assert.IsTrue(l.Parse(), "Не пропускает 'aa#2N3@_3-x//45'");
+            expected = "'aa#2N3@_3-x//45'";
+            Assert.AreEqual(expected, l.ParseResult, $"Неправильно собран {expected}");
 
             l = new StringLexer("'23 3 a'");
             Assert.IsTrue(l.Parse(), "Не пропускает '23 3 a'");
+            expected = "'23 3 a'";
+            Assert.AreEqual(expected, l.ParseResult, $"Неправильно собран {expected}");
         }
 
         [Test]
