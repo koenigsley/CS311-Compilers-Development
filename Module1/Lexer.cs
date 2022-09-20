@@ -723,11 +723,12 @@ namespace Lexer
                 NextCh();
             }
 
+            parseResult.Add(builder.ToString());
+
             if (currentCh == '.')
             {
                 lastCharIsDot = true;
-                parseResult.Add(builder.ToString());
-                builder = new StringBuilder();
+                builder.Clear();
                 NextCh();
             }
         }
