@@ -19,7 +19,6 @@ namespace TestSimpleLexer
     }
     
     [TestFixture]
-    [Ignore("This test is disabled")]
     public class TestSimpleLexer
     {
         public static List< KeyValuePair<Tok, string> > getLexerOutput(Lexer l)
