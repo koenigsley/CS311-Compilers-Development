@@ -55,7 +55,6 @@ namespace TestSimpleLexer
     }
     
     [TestFixture]
-    [Ignore("This test is disabled")]
     public class TestSimpleLexerOps
     {
         [Test]
