@@ -8,13 +8,12 @@ using System.Linq;
 
 namespace TestSimpleLexer
 {
-    
     public class LexemList: List<KeyValuePair<Tok, string>>
     {
         public void Add(Tok key, string value)
         {
             var element = new KeyValuePair<Tok, string>(key, value);
-            this.Add(element);
+            Add(element);
         }
     }
     
@@ -23,7 +22,7 @@ namespace TestSimpleLexer
     {
         public static List< KeyValuePair<Tok, string> > getLexerOutput(Lexer l)
         {
-            List< KeyValuePair<Tok, string> > result = new List< KeyValuePair<Tok, string> >();
+            var result = new List< KeyValuePair<Tok, string> >();
             do
             {
                 result.Add(new KeyValuePair<Tok, string>(l.LexKind, l.LexText));
@@ -50,8 +49,7 @@ namespace TestSimpleLexer
             {
                 Assert.Fail();
             }
-        }
-        
+        } 
     }
     
     [TestFixture]
@@ -92,7 +90,7 @@ namespace TestSimpleLexer
             Lexer l = new Lexer(inputReader);
             
             var lexems = TestSimpleLexer.getLexerOutput(l);
-            Assert.IsTrue(lexems.Count == 10);
+            Assert.AreEqual(10, lexems.Count);
             CollectionAssert.AreEqual(new LexemList()
             {
                 {Tok.DIV, "div"},
@@ -120,11 +118,9 @@ namespace TestSimpleLexer
                 var lexems = TestSimpleLexer.getLexerOutput(l);
             });
         }
-        
     }
     
     [TestFixture]
-    [Ignore("This test is disabled")]
     public class TestSimpleLexerAssigns
     {
         [Test]
@@ -155,14 +151,12 @@ namespace TestSimpleLexer
    
             }.ToList(), lexems);
         }
-        
     }
     
     [TestFixture]
     public class TestSimpleLexerComparisons
     {
         [Test]
-        [Ignore("This test is disabled")]
         public void TestComparisons()
         {
             string text = @"><>>=<=+<> > <=";
@@ -170,7 +164,7 @@ namespace TestSimpleLexer
             Lexer l = new Lexer(inputReader);
             
             var lexems = TestSimpleLexer.getLexerOutput(l);
-            Assert.IsTrue(lexems.Count == 8);
+            Assert.AreEqual(8, lexems.Count);
             CollectionAssert.AreEqual(new LexemList()
             {
                 {Tok.GT, ">"},
@@ -193,7 +187,7 @@ namespace TestSimpleLexer
             Lexer l = new Lexer(inputReader);
             
             var lexems = TestSimpleLexer.getLexerOutput(l);
-            Assert.IsTrue(lexems.Count == 13);
+            Assert.AreEqual(13, lexems.Count);
             CollectionAssert.AreEqual(new LexemList()
             {
                 {Tok.GT, ">"},
@@ -216,7 +210,6 @@ namespace TestSimpleLexer
     }
     
     [TestFixture]
-    [Ignore("This test is disabled")]
     public class TestSimpleLexerLineCmt
     {
         [Test]
@@ -227,7 +220,7 @@ namespace TestSimpleLexer
             Lexer l = new Lexer(inputReader);
             
             var lexems = TestSimpleLexer.getLexerOutput(l);
-            Assert.IsTrue(lexems.Count == 3);
+            Assert.AreEqual(3, lexems.Count);
             CollectionAssert.AreEqual(new LexemList()
             {
                 {Tok.ID, "ts"},
@@ -237,14 +230,15 @@ namespace TestSimpleLexer
             }.ToList(), lexems);
         }
 
-        [Test] public void TestCommentFileEnd()
+        [Test] 
+        public void TestCommentFileEnd()
         {
             string text = @" ts:=623 //";
             TextReader inputReader = new StringReader(text);
             Lexer l = new Lexer(inputReader);
             
             var lexems = TestSimpleLexer.getLexerOutput(l);
-            Assert.IsTrue(lexems.Count == 3);
+            Assert.AreEqual(3, lexems.Count);
             CollectionAssert.AreEqual(new LexemList()
             {
                 {Tok.ID, "ts"},
@@ -254,7 +248,8 @@ namespace TestSimpleLexer
             }.ToList(), lexems);
         }
         
-        [Test] public void TestCommentNextLine()
+        [Test] 
+        public void TestCommentNextLine()
         {
             string text = @" ts:=623 // cmt
                             id := 22";
@@ -278,7 +273,6 @@ namespace TestSimpleLexer
     }
     
     [TestFixture]
-    [Ignore("This test is disabled")]
     public class TestSimpleLexerMultLineCmt
     {
         [Test]
