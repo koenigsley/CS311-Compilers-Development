@@ -5,14 +5,19 @@ using System.IO;
 
 namespace SimpleLexer
 {
+    public static class StringExtensionMethods
+    {
+        public static string RemoveLastChar(this string s)
+        {
+            return s.Remove(s.Length - 1);
+        }
+    }
 
     public class LexerException : System.Exception
     {
-        public LexerException(string msg)
-            : base(msg)
+        public LexerException(string msg) : base(msg)
         {
         }
-
     }
 
     public enum Tok
@@ -100,6 +105,12 @@ namespace SimpleLexer
             keywordsMap["begin"] = Tok.BEGIN;
             keywordsMap["end"] = Tok.END;
             keywordsMap["cycle"] = Tok.CYCLE;
+
+            keywordsMap["div"] = Tok.DIV;
+            keywordsMap["mod"] = Tok.MOD;
+            keywordsMap["and"] = Tok.AND;
+            keywordsMap["or"] = Tok.OR;
+            keywordsMap["not"] = Tok.NOT;
         }
 
         public string FinishCurrentLine()
@@ -163,15 +174,102 @@ namespace SimpleLexer
                 NextCh();
                 LexKind = Tok.SEMICOLON;
             }
-            else if (currentCh == ':')
+            else if (currentCh == ',')
             {
                 NextCh();
-                if (currentCh != '=')
-                {
-                    LexError("= was expected");
-                }
+                LexKind = Tok.COMMA;
+            }
+            else if (currentCh == ':')
+            {
+                LexKind = Tok.COLON;
                 NextCh();
-                LexKind = Tok.ASSIGN;
+                if (currentCh == '=')
+                {
+                    LexKind = Tok.ASSIGN;
+                    NextCh();
+                }
+            }
+            else if (currentCh == '+')
+            {
+                LexKind = Tok.PLUS;
+                NextCh();
+                if (currentCh == '=')
+                {
+                    LexKind = Tok.PLUSASSIGN;
+                    NextCh();
+                }
+            }
+            else if (currentCh == '-')
+            {
+                LexKind = Tok.MINUS;
+                NextCh();
+                if (currentCh == '=')
+                {
+                    LexKind = Tok.MINUSASSIGN;
+                    NextCh();
+                }
+            }
+            else if (currentCh == '*')
+            {
+                LexKind = Tok.MULT;
+                NextCh();
+                if (currentCh == '=')
+                {
+                    LexKind = Tok.MULTASSIGN;
+                    NextCh();
+                }
+            }
+            else if (currentCh == '/')
+            {
+                LexKind = Tok.DIVISION;
+                NextCh();
+                if (currentCh == '/')
+                {
+                    while (currentCh != '\n' && currentCh != 0)
+                    {
+                        NextCh();
+                    }
+
+                    if (currentCh != 0)
+                    {
+                        NextCh();
+                    }
+                    NextLexem();
+                }
+                else if (currentCh == '=')
+                {
+                    LexKind = Tok.DIVASSIGN;
+                    NextCh();
+                }
+            }
+            else if (currentCh == '>')
+            {
+                LexKind = Tok.GT;
+                NextCh();
+                if (currentCh == '=')
+                {
+                    LexKind = Tok.GEQ;
+                    NextCh();
+                }
+            }
+            else if (currentCh == '<')
+            {
+                LexKind = Tok.LT;
+                NextCh();
+                if (currentCh == '=')
+                {
+                    LexKind = Tok.LEQ;
+                    NextCh();
+                } else if (currentCh == '>')
+                {
+                    LexKind = Tok.NEQ;
+                    NextCh();
+                }
+            }
+            else if (currentCh == '=')
+            {
+                LexKind = Tok.EQ;
+                NextCh();
             }
             else if (char.IsLetter(currentCh))
             {
@@ -197,7 +295,23 @@ namespace SimpleLexer
                 LexValue = Int32.Parse(LexText);
                 LexKind = Tok.INUM;
             }
-            else if ((int)currentCh == 0)
+            else if (currentCh == '{')
+            {
+                NextCh();
+                while (currentCh != '}' && currentCh != 0)
+                {
+                    NextCh();
+                }
+
+                if (currentCh == 0)
+                {
+                    LexError("unclosed multiline comment");
+                }
+
+                NextCh();
+                NextLexem();
+            }
+            else if (currentCh == 0)
             {
                 LexKind = Tok.EOF;
             }

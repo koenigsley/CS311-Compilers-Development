@@ -13,7 +13,7 @@ namespace SimpleLangLexerTest
         {
             string fileContents = @"begin 
 id23 := 24;  
-cycle ; 2 id258 id29 ; 
+cycle ; 2 id258 id29 ; // cycle example 
 end";
             TextReader inputReader = new StringReader(fileContents);
             Lexer l = new Lexer(inputReader);
@@ -24,6 +24,7 @@ end";
                     Console.WriteLine(l.TokToString(l.LexKind));
                     l.NextLexem();
                 } while (l.LexKind != Tok.EOF);
+                Console.ReadKey();
             }
             catch (LexerException e)
             {
