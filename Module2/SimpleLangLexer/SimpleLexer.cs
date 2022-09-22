@@ -5,14 +5,6 @@ using System.IO;
 
 namespace SimpleLexer
 {
-    public static class StringExtensionMethods
-    {
-        public static string RemoveLastChar(this string s)
-        {
-            return s.Remove(s.Length - 1);
-        }
-    }
-
     public class LexerException : System.Exception
     {
         public LexerException(string msg) : base(msg)
