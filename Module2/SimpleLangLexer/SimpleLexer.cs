@@ -54,7 +54,7 @@ namespace SimpleLexer
         RIGHT_BRACKET,
     }
 
-     public class Lexer
+    public class Lexer
     {
         private int position;
         private char currentCh;                      // Текущий символ
@@ -67,7 +67,6 @@ namespace SimpleLexer
         public int LexValue;                        // Целое значение, связанное с лексемой LexNum
 
         private string CurrentLineText;  // Накапливает символы текущей строки для сообщений об ошибках
-        
 
         public Lexer(TextReader input)
         {
