@@ -11,7 +11,7 @@ namespace GeneratedLexer
         static void Main(string[] args)
         {
             int cnt_id = 0;//кол-во идентификаторов
-            int min_id_len = Int32.MaxValue, max_id_len = 0; //минимальна€, максимальна€ длины идентификаторов
+            int min_id_len = int.MaxValue, max_id_len = 0; //минимальна€, максимальна€ длины идентификаторов
             double avg_id_len = 0; //средн€€ длина идентификатора
 
             int sum_int = 0; //сумма всех целых
@@ -24,14 +24,32 @@ namespace GeneratedLexer
             Console.WriteLine(File.ReadAllText(fname));
             Console.WriteLine("-------------------------");
 
-            Scanner scanner = new Scanner(new FileStream(fname, FileMode.Open));
+            var scanner = new Scanner(new FileStream(fname, FileMode.Open));
 
-            int tok = 0;
+            int tok;
             do {
                 tok = scanner.yylex();
 
-                if (tok == (int)Tok.EOF)
+                if (tok == (int)Tok.ID)
                 {
+                    cnt_id += 1;
+                    int idLen = scanner.yytext.Length;
+                    avg_id_len += idLen;
+                    min_id_len = Math.Min(min_id_len, idLen);
+                    max_id_len = Math.Max(max_id_len, idLen);
+                }
+                else if (tok == (int)Tok.INUM)
+                {
+                    sum_int += scanner.LexValueInt;
+                }
+                else if (tok == (int)Tok.RNUM)
+                {
+                    sum_d += scanner.LexValueDouble;
+                }
+                else if (tok == (int)Tok.EOF)
+                {
+                    avg_id_len /= cnt_id;
+
                     Console.WriteLine();
                     Console.WriteLine("number of id: {0:D}", cnt_id);
                     Console.WriteLine("average length of the id: {0:N}", avg_id_len / cnt_id);
