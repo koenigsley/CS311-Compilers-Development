@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using GeneratedLexer;
 
@@ -44,11 +45,18 @@ namespace TestGeneratedLexer
         {
             LexerAddon lexer = new LexerAddon(@"3 389 3 'ssfsf ' ");
             lexer.Lex();
-            
-            // TODO: checks in this test
+
+            var expected = new List<string>() { "'ssfsf '" };
+            CollectionAssert.AreEqual(expected, lexer.stringAps);
+
+            lexer = new LexerAddon(@"1337 'ssfsf ' ' hello' asd '' 'world!'");
+            lexer.Lex();
+
+            expected = new List<string>() { "'ssfsf '", "' hello'", "''", "'world!'" };
+            CollectionAssert.AreEqual(expected, lexer.stringAps);
         }
-        
-        [Ignore("This test is disabled")]
+
+        [Test]
         public void TestSingleLineCmt()
         {
             LexerAddon lexer = new LexerAddon(@"i22d1 5.6  // i 32 id3
@@ -86,8 +94,7 @@ namespace TestGeneratedLexer
             Assert.Contains("Md4", lexer.idsInComment);
             Assert.Contains("tgg", lexer.idsInComment);
             Assert.Contains("ide2", lexer.idsInComment);
-            Assert.Contains("ids", lexer.idsInComment);
-            
+            Assert.Contains("ids", lexer.idsInComment);   
         }
     }
 }
