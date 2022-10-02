@@ -48,8 +48,6 @@ namespace GeneratedLexer
                 }
                 else if (tok == (int)Tok.EOF)
                 {
-                    avg_id_len /= cnt_id;
-
                     Console.WriteLine();
                     Console.WriteLine("number of id: {0:D}", cnt_id);
                     Console.WriteLine("average length of the id: {0:N}", avg_id_len / cnt_id);

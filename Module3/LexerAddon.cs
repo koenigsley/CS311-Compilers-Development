@@ -13,12 +13,13 @@ namespace  GeneratedLexer
         private byte[] inputText = new byte[255];
 
         public int idCount = 0;
-        public int minIdLength = Int32.MaxValue;
+        public int minIdLength = int.MaxValue;
         public double avgIdLength = 0;
         public int maxIdLength = 0;
         public int sumInt = 0;
         public double sumDouble = 0.0;
         public List<string> idsInComment = new List<string>();
+        public List<string> stringAps = new List<string>();
         
 
         public LexerAddon(string programText)
@@ -46,10 +47,8 @@ namespace  GeneratedLexer
 
                 if (tok == (int)Tok.ID)
                 {
-                    avgIdLength *= Math.Max(1, idCount);
-                    avgIdLength +=  myScanner.yytext.Length;
+                    avgIdLength += myScanner.yytext.Length;
                     idCount += 1;
-                    avgIdLength /= idCount;
 
                     minIdLength = Math.Min(minIdLength, myScanner.yytext.Length);
                     maxIdLength = Math.Max(maxIdLength, myScanner.yytext.Length);
@@ -65,8 +64,14 @@ namespace  GeneratedLexer
                     myScanner.LexValueDouble = double.Parse(myScanner.yytext);
                     sumDouble += myScanner.LexValueDouble;
                 }
+                else if (tok == (int)Tok.STRINGAP)
+                {
+                    stringAps.Add(myScanner.yytext);
+                }
                 else if (tok == (int)Tok.EOF)
                 {
+                    avgIdLength /= idCount;
+                    idsInComment = myScanner.idsInComment;
                     break;
                 }
             } while (true);
