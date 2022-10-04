@@ -33,7 +33,7 @@ namespace SimpleLangParser
             }
             else
             {
-                SyntaxError("expression expected");
+                SyntaxError($"expression expected, got \"{l.LexText}\" instead");
             }
         }
 
@@ -45,7 +45,7 @@ namespace SimpleLangParser
                 l.NextLexem();
             }
             else {
-                SyntaxError(":= expected");
+                SyntaxError($":= expected, got \"{l.LexText}\" instead");
             }
             Expr();
         }
@@ -84,6 +84,11 @@ namespace SimpleLangParser
                         For();
                         break;
                     }
+                case Tok.IF:
+                    {
+                        If();
+                        break;
+                    }
                 case Tok.ID:
                     {
                         Assign();
@@ -107,7 +112,7 @@ namespace SimpleLangParser
             }
             else
             {
-                SyntaxError("end expected");
+                SyntaxError($"end expected, got \"{l.LexText}\" instead");
             }
 
         }
@@ -125,18 +130,6 @@ namespace SimpleLangParser
             Expr();
             Do();
             Statement();
-        }
-
-        public void Do()
-        {
-            if (l.LexKind == Tok.DO)
-            {
-                l.NextLexem();
-            }
-            else
-            {
-                SyntaxError($"do expected, got \"{l.LexText}\" instead");
-            }
         }
 
         public void For()
@@ -167,6 +160,48 @@ namespace SimpleLangParser
             else
             {
                 SyntaxError($"to expected, got \"{l.LexText}\" instead");
+            }
+        }
+
+        public void Do()
+        {
+            if (l.LexKind == Tok.DO)
+            {
+                l.NextLexem();
+            }
+            else
+            {
+                SyntaxError($"do expected, got \"{l.LexText}\" instead");
+            }
+        }
+
+        public void If()
+        {
+            l.NextLexem();  // пропуск if
+            Expr();
+            Then();
+            Statement();
+            Else();
+        }
+
+        public void Then()
+        {
+            if (l.LexKind == Tok.THEN)
+            {
+                l.NextLexem();
+            }
+            else
+            {
+                SyntaxError($"then expected, got \"{l.LexText}\" instead");
+            }
+        }
+
+        public void Else()
+        {
+            if (l.LexKind == Tok.ELSE)
+            {
+                l.NextLexem();  // пропуск else
+                Statement();
             }
         }
 
