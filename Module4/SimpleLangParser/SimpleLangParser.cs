@@ -6,11 +6,9 @@ namespace SimpleLangParser
 {
     public class ParserException : System.Exception
     {
-        public ParserException(string msg)
-            : base(msg)
+        public ParserException(string msg) : base(msg)
         {
         }
-
     }
 
     public class Parser
@@ -76,6 +74,16 @@ namespace SimpleLangParser
                         Cycle(); 
                         break;
                     }
+                case Tok.WHILE:
+                    {
+                        While();
+                        break;
+                    }
+                case Tok.FOR:
+                    {
+                        For();
+                        break;
+                    }
                 case Tok.ID:
                     {
                         Assign();
@@ -83,7 +91,7 @@ namespace SimpleLangParser
                     }
                 default:
                     {
-                        SyntaxError("Operator expected");
+                        SyntaxError($"Operator expected, got \"{l.LexText}\" instead");
                         break;
                     }
             }
@@ -109,6 +117,57 @@ namespace SimpleLangParser
             l.NextLexem();  // пропуск cycle
             Expr();
             Statement();
+        }
+
+        public void While()
+        {
+            l.NextLexem();  // пропуск while
+            Expr();
+            Do();
+            Statement();
+        }
+
+        public void Do()
+        {
+            if (l.LexKind == Tok.DO)
+            {
+                l.NextLexem();
+            }
+            else
+            {
+                SyntaxError($"do expected, got \"{l.LexText}\" instead");
+            }
+        }
+
+        public void For()
+        {
+            l.NextLexem();  // пропуск for
+            ID();
+            Assign();
+            To();
+            Expr();
+            Do();
+            Statement();
+        }
+
+        public void ID()
+        {
+            if (l.LexKind != Tok.ID)
+            {
+                SyntaxError($"id expected, got \"{l.LexText}\" instead");
+            }
+        }
+
+        public void To()
+        {
+            if (l.LexKind == Tok.TO)
+            {
+                l.NextLexem();
+            } 
+            else
+            {
+                SyntaxError($"to expected, got \"{l.LexText}\" instead");
+            }
         }
 
         public void SyntaxError(string message) 
