@@ -26,7 +26,6 @@ namespace TestDescentParser
         }
         
         [Test]
-        [Ignore("This test is disabled")]
         public void TestWhile()
         {
             Assert.IsTrue(Parse(@"begin while 5 do a:=2 end"));
@@ -75,7 +74,6 @@ namespace TestDescentParser
         }
         
         [Test]
-        [Ignore("This test is disabled")]
         public void TestIf()
         {
             Assert.IsTrue(Parse(@"begin 
@@ -101,7 +99,6 @@ namespace TestDescentParser
         }
         
         [Test]
-        [Ignore("This test is disabled")]
         public void TestExpr()
         {
             Assert.IsTrue(Parse(@"begin 
