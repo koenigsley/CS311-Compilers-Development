@@ -30,10 +30,36 @@ namespace SimpleLangParser
             if (l.LexKind == Tok.ID || l.LexKind == Tok.INUM)
             {
                 l.NextLexem();
+                if (l.LexKind == Tok.MINUS || l.LexKind == Tok.PLUS || l.LexKind == Tok.MULT || l.LexKind == Tok.DIVISION)
+                {
+                    l.NextLexem();
+                    Expr();
+                }
+            }
+            else if (l.LexKind == Tok.LEFT_BRACKET || l.LexKind == Tok.RIGHT_BRACKET)
+            {
+                if (l.LexKind == Tok.LEFT_BRACKET)
+                {
+                    l.NextLexem();
+                    Expr();
+                    RightBracket();
+                }
             }
             else
             {
                 SyntaxError($"expression expected, got \"{l.LexText}\" instead");
+            }
+        }
+
+        public void RightBracket()
+        {
+            if (l.LexKind == Tok.RIGHT_BRACKET)
+            {
+                l.NextLexem();
+            }
+            else
+            {
+                SyntaxError($"right bracket expected, got \"{l.LexText}\" instead");
             }
         }
 
