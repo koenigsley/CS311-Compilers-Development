@@ -1,4 +1,5 @@
 %using ScannerHelper;
+%using System.Collections.Generic;
 %namespace SimpleScanner
 
 Alpha 	[a-zA-Z_]
@@ -6,57 +7,97 @@ Digit   [0-9]
 AlphaDigit {Alpha}|{Digit}
 INTNUM  {Digit}+
 REALNUM {INTNUM}\.{INTNUM}
-ID {Alpha}{AlphaDigit}* 
+ID {Alpha}{AlphaDigit}*
+DotChr [^\r\n]
+SingleCmnt \/\/{DotChr}*
+STRINGAP \'[^']*\'
+
+%x COMMENT
 
 // Здесь можно делать описания типов, переменных и методов - они попадают в класс Scanner
 %{
   public int LexValueInt;
   public double LexValueDouble;
+  public List<string> idsInComment = new List<string>();
 %}
 
 %%
-{INTNUM} { 
+{INTNUM} {
   LexValueInt = int.Parse(yytext);
   return (int)Tok.INUM;
 }
 
-{REALNUM} { 
+{REALNUM} {
   LexValueDouble = double.Parse(yytext);
   return (int)Tok.RNUM;
 }
 
-begin { 
+begin {
   return (int)Tok.BEGIN;
 }
 
-end { 
+end {
   return (int)Tok.END;
 }
 
-cycle { 
+cycle {
   return (int)Tok.CYCLE;
 }
 
-{ID}  { 
+{ID} {
   return (int)Tok.ID;
 }
 
-":" { 
+":" {
   return (int)Tok.COLON;
 }
 
-":=" { 
+":=" {
   return (int)Tok.ASSIGN;
 }
 
-";" { 
+";" {
   return (int)Tok.SEMICOLON;
+}
+
+{SingleCmnt} {
+	return (int)Tok.COMMENT;
+}
+
+{STRINGAP} {
+	return (int)Tok.STRINGAP;
+}
+
+"{" { 
+    // переход в состояние COMMENT
+    BEGIN(COMMENT);
+}
+
+<COMMENT> begin {
+}
+
+<COMMENT> end {
+}
+
+<COMMENT> cycle {
+}
+
+<COMMENT> {ID} {
+    idsInComment.Add(yytext);
+}
+
+
+<COMMENT> "}" { 
+    // переход в состояние INITIAL
+    BEGIN(INITIAL);
+	return (int)Tok.LONGCOMMENT;
 }
 
 [^ \r\n] {
 	LexError();
 	return 0; // конец разбора
 }
+
 
 %%
 
