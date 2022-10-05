@@ -271,6 +271,16 @@ namespace SimpleLexer
                 LexKind = Tok.EQ;
                 NextCh();
             }
+            else if (currentCh == '(')
+            {
+                LexKind = Tok.LEFT_BRACKET;
+                NextCh();
+            }
+            else if (currentCh == ')')
+            {
+                LexKind = Tok.RIGHT_BRACKET;
+                NextCh();
+            }
             else if (char.IsLetter(currentCh))
             {
                 while (char.IsLetterOrDigit(currentCh))
