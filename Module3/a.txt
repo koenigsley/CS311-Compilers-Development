@@ -1,3 +1,8 @@
-begin ggg : ; :+= 7 99.9 5 
-1 
-ppp end
+begin 
+  g := 7;
+  ggg := 10.0;
+  ggg1 := 17.5;
+  another_variable := 1;
+  var := 5; { hello world
+  567 }
+end
