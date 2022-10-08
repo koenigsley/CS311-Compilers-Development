@@ -65,9 +65,12 @@ class ScannerHelper
     keywords = new Dictionary<string,int>();
     keywords.Add("begin",(int)Tokens.BEGIN);
     keywords.Add("end",(int)Tokens.END);
+
     keywords.Add("cycle",(int)Tokens.CYCLE);
 	keywords.Add("while", (int)Tokens.WHILE);
 	keywords.Add("do", (int)Tokens.DO);
+	keywords.Add("repeat", (int)Tokens.REPEAT);
+	keywords.Add("until", (int)Tokens.UNTIL);
   }
   public static int GetIDToken(string s)
   {

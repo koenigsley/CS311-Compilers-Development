@@ -63,6 +63,17 @@ namespace ProgramTree
         }
     }
 
+    public class RepeatNode: StatementNode
+    {
+        public StatementNode Stat { get; set; }
+        public ExprNode Expr { get; set; }
+        public RepeatNode(StatementNode stat, ExprNode expr)
+        {
+            Stat = stat;
+            Expr = expr;
+        }
+    }
+
     public class BlockNode : StatementNode
     {
         public List<StatementNode> StList = new List<StatementNode>();
