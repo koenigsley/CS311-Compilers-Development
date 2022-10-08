@@ -144,4 +144,18 @@ namespace ProgramTree
             IdList.Add(id);
         }
     }
+
+    public class BinaryNode : ExprNode
+    {
+        ExprNode LeftExpr { get; set; }
+        ExprNode RightExpr { get; set; }
+        char Operation { get; set; }
+
+        public BinaryNode(ExprNode leftExpr, ExprNode rightExpr, char operation)
+        {
+            LeftExpr = leftExpr;
+            RightExpr = rightExpr;
+            Operation = operation;
+        }
+    }
 }

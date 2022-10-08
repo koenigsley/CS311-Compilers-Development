@@ -31,12 +31,17 @@ ID {Alpha}{AlphaDigit}*
 }
 
 ":=" { return (int)Tokens.ASSIGN; }
-";" { return (int)Tokens.SEMICOLON; }
 
 "(" { return (int)Tokens.LPAR; }
 ")" { return (int)Tokens.RPAR; }
 
+";" { return (int)Tokens.SEMICOLON; }
 "," { return (int)Tokens.COMMA; }
+
+"+" { return (int)Tokens.PLUS; }
+"-" { return (int)Tokens.MINUS; }
+"*" { return (int)Tokens.MUL; }
+"/" { return (int)Tokens.DIV; }
 
 [^ \r\n] {
 	LexError();

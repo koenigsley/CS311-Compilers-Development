@@ -20,12 +20,12 @@
 
 %namespace SimpleParser
 
-%token BEGIN END CYCLE ASSIGN SEMICOLON WHILE DO REPEAT UNTIL FOR TO WRITE LPAR RPAR IF THEN ELSE VAR COMMA
+%token BEGIN END CYCLE ASSIGN SEMICOLON WHILE DO REPEAT UNTIL FOR TO WRITE LPAR RPAR IF THEN ELSE VAR COMMA PLUS MINUS MUL DIV
 %token <iVal> INUM 
 %token <dVal> RNUM 
 %token <sVal> ID
 
-%type <eVal> expr ident 
+%type <eVal> expr ident expr2 expr3
 %type <stVal> assign statement cycle while repeat for write if var
 %type <blVal> stlist block
 
@@ -62,9 +62,20 @@ ident 	: ID { $$ = new IdNode($1); }
 assign 	: ident ASSIGN expr { $$ = new AssignNode($1 as IdNode, $3); }
 		;
 
-expr	: ident  { $$ = $1 as IdNode; }
-		| INUM { $$ = new IntNumNode($1); }
-		;
+expr    : expr2 { $$ = $1; }
+        | expr PLUS expr2  { $$ = new BinaryNode($1, $3, '+'); }
+        | expr MINUS expr2 { $$ = new BinaryNode($1, $3, '-'); }
+        ;
+
+expr2   : expr3 { $$ = $1; }
+        | expr2 MUL expr3 { $$ = new BinaryNode($1, $3, '*'); }
+        | expr2 DIV expr3 { $$ = new BinaryNode($1, $3, '/'); }
+        ;
+
+expr3   : ident { $$ = $1; }
+        | INUM { $$ = new IntNumNode($1); }
+        | LPAR expr RPAR { $$ = $2; }
+        ;
 
 block	: BEGIN stlist END { $$ = $2; }
 		;
