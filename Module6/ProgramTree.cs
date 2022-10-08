@@ -129,4 +129,19 @@ namespace ProgramTree
             Stat2 = stat2;
         }
     }
+
+    public class VarDefNode : StatementNode
+    {
+        public List<IdNode> IdList = new List<IdNode>();
+
+        public VarDefNode(IdNode id)
+        {
+            Add(id);
+        }
+
+        public void Add(IdNode id)
+        {
+            IdList.Add(id);
+        }
+    }
 }

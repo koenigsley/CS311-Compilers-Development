@@ -36,6 +36,8 @@ ID {Alpha}{AlphaDigit}*
 "(" { return (int)Tokens.LPAR; }
 ")" { return (int)Tokens.RPAR; }
 
+"," { return (int)Tokens.COMMA; }
+
 [^ \r\n] {
 	LexError();
 }
@@ -86,6 +88,8 @@ class ScannerHelper
 	keywords.Add("if", (int)Tokens.IF);
 	keywords.Add("then", (int)Tokens.THEN);
 	keywords.Add("else", (int)Tokens.ELSE);
+
+	keywords.Add("var", (int)Tokens.VAR);
   }
   public static int GetIDToken(string s)
   {
