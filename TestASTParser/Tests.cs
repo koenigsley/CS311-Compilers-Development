@@ -5,6 +5,7 @@ using SimpleParser;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace TestASTParser
 {
@@ -131,8 +132,13 @@ namespace TestASTParser
         [Test]
         public void TestVarDef()
         {
-            Assert.Fail();
-            // TODO: дописать тест
+            var tree = ASTParserTests.Parse("begin var a end");
+            Assert.AreEqual("ProgramTree.VarDefNode, SimpleLang", (string)tree["StList"]["$values"][0]["$type"]);
+            Assert.AreEqual("a", string.Join(",", tree["StList"]["$values"][0]["IdList"]["$values"].Select(jt => jt["Name"])));
+
+            tree = ASTParserTests.Parse("begin var a,b, c end");
+            Assert.AreEqual("ProgramTree.VarDefNode, SimpleLang", (string)tree["StList"]["$values"][0]["$type"]);
+            Assert.AreEqual("a,b,c", string.Join(",", tree["StList"]["$values"][0]["IdList"]["$values"].Select(jt => jt["Name"])));
         }
         
         [Test]
