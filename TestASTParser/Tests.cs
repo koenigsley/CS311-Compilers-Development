@@ -104,8 +104,28 @@ namespace TestASTParser
         [Test]
         public void TestIf()
         {
-            Assert.Fail();
-            // TODO: дописать тест
+            // Short if
+            var tree = ASTParserTests.Parse("begin if 1 then write(1) end");
+            Assert.AreEqual("ProgramTree.IfNode, SimpleLang", (string)tree["StList"]["$values"][0]["$type"]);
+
+            Assert.AreEqual("ProgramTree.IntNumNode, SimpleLang", (string)tree["StList"]["$values"][0]["Expr"]["$type"]);
+            Assert.AreEqual("1", ((string)tree["StList"]["$values"][0]["Expr"]["Num"]).Trim());
+
+            Assert.AreEqual("ProgramTree.WriteNode, SimpleLang", (string)tree["StList"]["$values"][0]["Stat1"]["$type"]);
+            Assert.AreEqual("1", (string)tree["StList"]["$values"][0]["Stat1"]["Expr"]["Num"]);
+
+            // Complete if
+            tree = ASTParserTests.Parse("begin if 2 then write(2) else write(3) end");
+            Assert.AreEqual("ProgramTree.IfNode, SimpleLang", (string)tree["StList"]["$values"][0]["$type"]);
+
+            Assert.AreEqual("ProgramTree.IntNumNode, SimpleLang", (string)tree["StList"]["$values"][0]["Expr"]["$type"]);
+            Assert.AreEqual("2", ((string)tree["StList"]["$values"][0]["Expr"]["Num"]).Trim());
+
+            Assert.AreEqual("ProgramTree.WriteNode, SimpleLang", (string)tree["StList"]["$values"][0]["Stat1"]["$type"]);
+            Assert.AreEqual("2", (string)tree["StList"]["$values"][0]["Stat1"]["Expr"]["Num"]);
+
+            Assert.AreEqual("ProgramTree.WriteNode, SimpleLang", (string)tree["StList"]["$values"][0]["Stat2"]["$type"]);
+            Assert.AreEqual("3", (string)tree["StList"]["$values"][0]["Stat2"]["Expr"]["Num"]);
         }
         
         [Test]
