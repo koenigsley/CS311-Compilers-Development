@@ -24,7 +24,7 @@ statement: assign
 		| while
 		| repeat
 		| for
-		| cond
+		| if
 		| write
 		| var
 		;
@@ -72,8 +72,8 @@ repeat  : REPEAT stlist UNTIL expr
 for     : FOR ident ASSIGN expr TO expr DO statement
         ;
 
-cond    : IF expr THEN statement
-        | cond ELSE statement
+if      : IF expr THEN statement
+        | if ELSE statement
 		;
 
 write   : WRITE LPAR expr RPAR

@@ -4,7 +4,7 @@
 
 // GPPG version 1.3.6
 // Machine:  DESKTOP-BR3L60F
-// DateTime: 06.10.2022 17:12:35
+// DateTime: 09.10.2022 1:33:45
 // UserName: Mike
 // Input file <SimpleYacc.y>
 
@@ -46,7 +46,7 @@ public class Parser: ShiftReduceParser<int, LexLocation>
   private static State[] states = new State[72];
   private static string[] nonTerms = new string[] {
       "progr", "$accept", "block", "stlist", "statement", "assign", "cycle", 
-      "while", "repeat", "for", "cond", "write", "var", "idlist", "ident", "expr", 
+      "while", "repeat", "for", "if", "write", "var", "idlist", "ident", "expr", 
       "expr2", "expr3", };
 
   static Parser() {
