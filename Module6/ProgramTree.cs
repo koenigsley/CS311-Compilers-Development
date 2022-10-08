@@ -102,4 +102,13 @@ namespace ProgramTree
         }
     }
 
+    public class WriteNode : StatementNode
+    {
+        public ExprNode Expr { get; set; }
+
+        public WriteNode(ExprNode expr)
+        {
+            Expr = expr;
+        }
+    }
 }
