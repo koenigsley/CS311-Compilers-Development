@@ -17,27 +17,26 @@ namespace TestASTParser
 
             Parser parser = new Parser(scanner);
 
-            var b = parser.Parse();
-            if (!b)
+            if (!parser.Parse())
+            {
                 Assert.Fail("программа не распознана");
+            }
             else
             {
                 JsonSerializerSettings jsonSettings = new JsonSerializerSettings();
-                jsonSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                jsonSettings.Formatting = Formatting.Indented;
                 jsonSettings.TypeNameHandling = TypeNameHandling.All;
                 string output = JsonConvert.SerializeObject(parser.root, jsonSettings);
                 return JObject.Parse(output);
             }
 
             return null;
-
         }
     }
     
     [TestFixture]
     public class WhileTests
     {
-        
         [Test]
         public void TestWhile()
         {
@@ -52,7 +51,6 @@ namespace TestASTParser
     [TestFixture]
     public class RepeatTests
     {
-        
         [Test]
         public void TestRepeat()
         {
@@ -67,7 +65,6 @@ namespace TestASTParser
     [TestFixture]
     public class ForTests
     {
-        
         [Test]
         public void TestFor()
         {
@@ -89,21 +86,21 @@ namespace TestASTParser
     
     [TestFixture]
     public class WriteTests
-    {
-        
+    {   
         [Test]
         public void TestWrite()
         {
             var tree = ASTParserTests.Parse("begin write(2) end");
             Assert.AreEqual("ProgramTree.WriteNode, SimpleLang", (string)tree["StList"]["$values"][0]["$type"]);
-            // TODO: проверить содержимое write
+
+            Assert.AreEqual("ProgramTree.IntNumNode, SimpleLang", (string)tree["StList"]["$values"][0]["Expr"]["$type"]);
+            Assert.AreEqual("2", ((string)tree["StList"]["$values"][0]["Expr"]["Num"]).Trim());
         }
     }
     
     [TestFixture]
     public class ExtraTests
     {
-        
         [Test]
         public void TestIf()
         {
