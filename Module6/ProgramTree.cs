@@ -52,6 +52,17 @@ namespace ProgramTree
         }
     }
 
+    public class WhileNode: StatementNode
+    {
+        public ExprNode Expr { get; set; }
+        public StatementNode Stat { get; set; }
+        public WhileNode(ExprNode expr, StatementNode stat)
+        {
+            Expr = expr;
+            Stat = stat;
+        }
+    }
+
     public class BlockNode : StatementNode
     {
         public List<StatementNode> StList = new List<StatementNode>();
