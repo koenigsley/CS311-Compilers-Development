@@ -74,6 +74,21 @@ namespace ProgramTree
         }
     }
 
+    public class ForNode: StatementNode
+    {
+        public IdNode Id { get; set; }
+        public ExprNode Expr1 { get; set; }
+        public ExprNode Expr2 { get; set; }
+        public StatementNode Stat { get; set; }
+        public ForNode(IdNode id, ExprNode expr1, ExprNode expr2, StatementNode stat)
+        {
+            Id = id;
+            Expr1 = expr1;
+            Expr2 = expr2;
+            Stat = stat;
+        }
+    }
+
     public class BlockNode : StatementNode
     {
         public List<StatementNode> StList = new List<StatementNode>();
