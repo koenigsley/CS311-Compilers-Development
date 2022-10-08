@@ -73,7 +73,17 @@ namespace TestASTParser
         {
             var tree = ASTParserTests.Parse("begin for i:=2 to 10 do a:=2 end");
             Assert.AreEqual("ProgramTree.ForNode, SimpleLang", (string)tree["StList"]["$values"][0]["$type"]);
-            // TODO: проверить узлы содержимого for
+
+            Assert.AreEqual("ProgramTree.IdNode, SimpleLang", (string)tree["StList"]["$values"][0]["Id"]["$type"]);
+            Assert.AreEqual("i", (string)tree["StList"]["$values"][0]["Id"]["Name"]);
+
+            Assert.AreEqual("ProgramTree.IntNumNode, SimpleLang", (string)tree["StList"]["$values"][0]["Expr1"]["$type"]);
+            Assert.AreEqual("2", ((string)tree["StList"]["$values"][0]["Expr1"]["Num"]).Trim());
+
+            Assert.AreEqual("ProgramTree.IntNumNode, SimpleLang", (string)tree["StList"]["$values"][0]["Expr2"]["$type"]);
+            Assert.AreEqual("10", ((string)tree["StList"]["$values"][0]["Expr2"]["Num"]).Trim());
+
+            Assert.AreEqual("ProgramTree.AssignNode, SimpleLang", (string)tree["StList"]["$values"][0]["Stat"]["$type"]);
         }
     }
     
