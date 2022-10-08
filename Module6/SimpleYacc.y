@@ -20,13 +20,13 @@
 
 %namespace SimpleParser
 
-%token BEGIN END CYCLE ASSIGN SEMICOLON WHILE DO REPEAT UNTIL FOR TO WRITE LPAR RPAR
+%token BEGIN END CYCLE ASSIGN SEMICOLON WHILE DO REPEAT UNTIL FOR TO WRITE LPAR RPAR IF THEN ELSE
 %token <iVal> INUM 
 %token <dVal> RNUM 
 %token <sVal> ID
 
 %type <eVal> expr ident 
-%type <stVal> assign statement cycle while repeat for write
+%type <stVal> assign statement cycle while repeat for write if
 %type <blVal> stlist block
 
 %%
@@ -52,6 +52,7 @@ statement: assign { $$ = $1; }
 		| repeat  { $$ = $1; }
 		| for     { $$ = $1; }
 		| write   { $$ = $1; }
+		| if      { $$ = $1; }
 	;
 
 ident 	: ID { $$ = new IdNode($1); }	
@@ -82,4 +83,10 @@ for     : FOR ident ASSIGN expr TO expr DO statement { $$ = new ForNode($2 as Id
 write   : WRITE LPAR expr RPAR { $$ = new WriteNode($3); }
         ;
 
+if      : IF expr THEN statement { $$ = new IfNode($2, $4); }
+        | if ELSE statement { 
+		    ($1 as IfNode).Stat2 = $3;
+		    $$ = $1; 
+		}
+		;
 %%
