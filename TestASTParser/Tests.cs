@@ -58,7 +58,9 @@ namespace TestASTParser
         {
             var tree = ASTParserTests.Parse("begin repeat a:=2 until 2 end");
             Assert.AreEqual("ProgramTree.RepeatNode, SimpleLang", (string)tree["StList"]["$values"][0]["$type"]);
-            // TODO: проверить узлы содержимого repeat
+            Assert.AreEqual("ProgramTree.AssignNode, SimpleLang", (string)tree["StList"]["$values"][0]["Stat"]["$type"]);
+            Assert.AreEqual("2", ((string)tree["StList"]["$values"][0]["Expr"]["Num"]).Trim());
+            Assert.AreEqual("ProgramTree.IntNumNode, SimpleLang", (string)tree["StList"]["$values"][0]["Expr"]["$type"]);
         }
     }
     
