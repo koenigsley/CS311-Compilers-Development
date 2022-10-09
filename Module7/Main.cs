@@ -47,7 +47,7 @@ namespace SimpleCompiler
 
                     var cuv = new CommonlyUsedVarVisitor();
                     parser.root.Visit(cuv);
-                    Console.WriteLine("Наиболее часто используемая переменная = {0}", cuv.mostCommonlyUsedVar());
+                    Console.WriteLine("Наиболее часто используемая переменная = {0}", cuv.MostCommonlyUsedVar);
                     Console.WriteLine("-------------------------------");
 
                     var cviv = new ChangeVarIdVisitor("a", "d");

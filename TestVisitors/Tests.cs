@@ -64,7 +64,7 @@ namespace TestVisitors
             Assert.IsTrue(p.Parse());
             var avgCounter = new CountCyclesOpVisitor();
             p.root.Visit(avgCounter);
-            Assert.AreEqual(4, avgCounter.MidCount());            
+            Assert.AreEqual(4, avgCounter.MidCount());
         }
     }
     
@@ -78,7 +78,7 @@ namespace TestVisitors
             Assert.IsTrue(p.Parse());
             var varCounter = new CommonlyUsedVarVisitor();
             p.root.Visit(varCounter);
-            Assert.AreEqual("a0", varCounter.mostCommonlyUsedVar());            
+            Assert.AreEqual("a0", varCounter.MostCommonlyUsedVar);            
         }
         
         [Test]
@@ -88,7 +88,7 @@ namespace TestVisitors
             Assert.IsTrue(p.Parse());
             var varCounter = new CommonlyUsedVarVisitor();
             p.root.Visit(varCounter);
-            Assert.AreEqual("b1", varCounter.mostCommonlyUsedVar());            
+            Assert.AreEqual("b1", varCounter.MostCommonlyUsedVar);            
         }
     }
     
@@ -192,7 +192,7 @@ namespace TestVisitors
             
             var varCounter = new CommonlyUsedVarVisitor();
             p.root.Visit(varCounter);
-            Assert.AreEqual("z", varCounter.mostCommonlyUsedVar());
+            Assert.AreEqual("z", varCounter.MostCommonlyUsedVar);
         }
     }
     
