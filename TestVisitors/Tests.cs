@@ -102,7 +102,7 @@ namespace TestVisitors
             Assert.IsTrue(p.Parse());
             var exprMeter = new ExprComplexityVisitor();
             p.root.Visit(exprMeter);
-            var resultList = exprMeter.getComplexityList();
+            var resultList = exprMeter.ComplexityList;
             CollectionAssert.AreEqual(new int[] {1, 5, 0}, resultList);            
         }
         
@@ -113,7 +113,7 @@ namespace TestVisitors
             Assert.IsTrue(p.Parse());
             var exprMeter = new ExprComplexityVisitor();
             p.root.Visit(exprMeter);
-            var resultList = exprMeter.getComplexityList();
+            var resultList = exprMeter.ComplexityList;
             CollectionAssert.AreEqual(new int[] {4, 1}, resultList);            
         }
         
@@ -124,7 +124,7 @@ namespace TestVisitors
             Assert.IsTrue(p.Parse());
             var exprMeter = new ExprComplexityVisitor();
             p.root.Visit(exprMeter);
-            var resultList = exprMeter.getComplexityList();
+            var resultList = exprMeter.ComplexityList;
             CollectionAssert.AreEqual(new int[] {2}, resultList);            
         }
         
