@@ -11,22 +11,19 @@ namespace TestVisitors
     {
         public static Parser Parse(string text)
         {
-            Scanner scanner = new Scanner();
+            var scanner = new Scanner();
             scanner.SetSource(text, 0);
-
-            Parser parser = new Parser(scanner);
-            return parser;
+            return new Parser(scanner);
         }
     }
     
     [TestFixture]
-    [Ignore("This test is disabled")]
     public class TestAvgOpCount: ParserTest
     {
         [Test]
         public void NoLoopTest()
         {
-            Parser p = Parse(@"begin end ");
+            var p = Parse(@"begin end ");
             Assert.IsTrue(p.Parse());
             var avgCounter = new CountCyclesOpVisitor();
             p.root.Visit(avgCounter);
@@ -36,7 +33,7 @@ namespace TestVisitors
         [Test]
         public void ThreeLoopsTest()
         {
-            Parser p = Parse(@"begin
+            var p = Parse(@"begin
        var a,b,d;
        b := 2;
        a := 3;
@@ -72,13 +69,12 @@ namespace TestVisitors
     }
     
     [TestFixture]
-    [Ignore("This test is disabled")]
     public class TestCommonVariable: ParserTest
     {
         [Test]
         public void OneVarTest()
         {
-            Parser p = Parse(@"begin var a0; a0:=2; a0:=a0+2*a0-3; a0:=3; end ");
+            var p = Parse(@"begin var a0; a0:=2; a0:=a0+2*a0-3; a0:=3; end ");
             Assert.IsTrue(p.Parse());
             var varCounter = new CommonlyUsedVarVisitor();
             p.root.Visit(varCounter);
@@ -88,7 +84,7 @@ namespace TestVisitors
         [Test]
         public void ManyVarTest()
         {
-            Parser p = Parse(@"begin var a1,b1,c1; a1:=2+c1-b1; b1:=a1+2*a1-3-b1+b1-b1+b1+b1; b1:=c1-3+b1-3; end ");
+            var p = Parse(@"begin var a1,b1,c1; a1:=2+c1-b1; b1:=a1+2*a1-3-b1+b1-b1+b1+b1; b1:=c1-3+b1-3; end ");
             Assert.IsTrue(p.Parse());
             var varCounter = new CommonlyUsedVarVisitor();
             p.root.Visit(varCounter);
@@ -97,13 +93,12 @@ namespace TestVisitors
     }
     
     [TestFixture]
-    [Ignore("This test is disabled")]
     public class TestExprComplexity: ParserTest
     {
         [Test]
         public void AssignTest()
         {
-            Parser p = Parse(@"begin var a2; a2:=2+2; a2:=a2+2*a2-3; a2:=3; end ");
+            var p = Parse(@"begin var a2; a2:=2+2; a2:=a2+2*a2-3; a2:=3; end ");
             Assert.IsTrue(p.Parse());
             var exprMeter = new ExprComplexityVisitor();
             p.root.Visit(exprMeter);
@@ -114,7 +109,7 @@ namespace TestVisitors
         [Test]
         public void CycleTest()
         {
-            Parser p = Parse(@"begin var a3; cycle 2+2/3 a3:=2-2 end ");
+            var p = Parse(@"begin var a3; cycle 2+2/3 a3:=2-2 end ");
             Assert.IsTrue(p.Parse());
             var exprMeter = new ExprComplexityVisitor();
             p.root.Visit(exprMeter);
@@ -125,7 +120,7 @@ namespace TestVisitors
         [Test]
         public void WriteTest()
         {
-            Parser p = Parse(@"begin write(2+2-3) end ");
+            var p = Parse(@"begin write(2+2-3) end ");
             Assert.IsTrue(p.Parse());
             var exprMeter = new ExprComplexityVisitor();
             p.root.Visit(exprMeter);
@@ -139,7 +134,7 @@ namespace TestVisitors
             [Test]
             public void OneLoopTest()
             {
-                Parser p = Parse(@"begin cycle 2 write(2) end");
+                var p = Parse(@"begin cycle 2 write(2) end");
                 Assert.IsTrue(p.Parse());
                 var loopCounter = new MaxNestCyclesVisitor();
                 p.root.Visit(loopCounter);
@@ -149,7 +144,7 @@ namespace TestVisitors
             [Test]
             public void ThreeLoopsTest1()
             {
-                Parser p = Parse(@"begin cycle 2 cycle 3 cycle 4 write(5) end");
+                var p = Parse(@"begin cycle 2 cycle 3 cycle 4 write(5) end");
                 Assert.IsTrue(p.Parse());
                 var loopCounter = new MaxNestCyclesVisitor();
                 p.root.Visit(loopCounter);
@@ -190,7 +185,7 @@ namespace TestVisitors
         [Test]
         public void SimpleTest()
         {
-            Parser p = Parse(@"begin var a4; a4:=2; a4:=a4+2*a4-3; a4:=3; end ");
+            var p = Parse(@"begin var a4; a4:=2; a4:=a4+2*a4-3; a4:=3; end ");
             Assert.IsTrue(p.Parse());
             var varRenamer = new ChangeVarIdVisitor("a4", "z");
             p.root.Visit(varRenamer);
@@ -202,18 +197,16 @@ namespace TestVisitors
     }
     
     [TestFixture]
-    [Ignore("This test is disabled")]
     public class TestIfCycleNest: ParserTest
     {
         [Test]
         public void FirstTest()
         {
-            Parser p = Parse(@"begin var a5; cycle 3 if 1 then cycle 4 a5 := 1 end ");
+            var p = Parse(@"begin var a5; cycle 3 if 1 then cycle 4 a5 := 1 end ");
             Assert.IsTrue(p.Parse());
             var nestWalker = new MaxIfCycleNestVisitor();
             p.root.Visit(nestWalker);
             Assert.AreEqual(3, nestWalker.MaxNest);
         }
     }
-
 }
