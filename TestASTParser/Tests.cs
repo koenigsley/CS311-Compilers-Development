@@ -144,8 +144,8 @@ namespace TestASTParser
         [Test]
         public void TestBinary()
         {
-            Assert.Fail();
-            // TODO: дописать тест
+            var tree = ASTParserTests.Parse("begin if (x+3/2)*2 then var a end");
+            Assert.AreEqual("ProgramTree.BinaryNode, SimpleLang", (string)tree["StList"]["$values"][0]["Expr"]["$type"]);
         }
     }
 }
