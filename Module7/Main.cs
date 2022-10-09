@@ -18,14 +18,15 @@ namespace SimpleCompiler
             {
                 string Text = File.ReadAllText(FileName);
 
-                Scanner scanner = new Scanner();
+                var scanner = new Scanner();
                 scanner.SetSource(Text, 0);
 
-                Parser parser = new Parser(scanner);
+                var parser = new Parser(scanner);
 
-                var b = parser.Parse();
-                if (!b)
+                if (!parser.Parse())
+                {
                     Console.WriteLine("Ошибка");
+                }
                 else
                 {
                     Console.WriteLine("Синтаксическое дерево построено");

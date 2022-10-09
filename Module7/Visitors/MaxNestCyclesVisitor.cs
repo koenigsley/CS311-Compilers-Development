@@ -8,16 +8,16 @@ namespace SimpleLang.Visitors
 {
     public class MaxNestCyclesVisitor : AutoVisitor
     {
-        private int _currentCycleDepth = 0;
-        private int _maxCycleDepth = 0;
-        public int MaxNest => _maxCycleDepth;
+        protected int _currentDepth = 0;
+        protected int _maxDepth = 0;
+        public int MaxNest => _maxDepth;
 
         public override void VisitCycleNode(CycleNode c)
         {
-            _currentCycleDepth += 1;
-            _maxCycleDepth = Math.Max(_maxCycleDepth, _currentCycleDepth);
+            _currentDepth += 1;
+            _maxDepth = Math.Max(_maxDepth, _currentDepth);
             base.VisitCycleNode(c);
-            _currentCycleDepth -= 1;
+            _currentDepth -= 1;
         }
     }
 }

@@ -1,8 +1,13 @@
 begin
-  var a,b,d;
+  var a,b,d,x;
   b := 2;
   a := 3;
   a := a * 4 + b;;;
+  x := 0;
+
+  if 1 then begin x := 2 end else begin x := 3 end;
+  if 3 then x := 4 else x := 5;
+
   cycle 3
   begin
     a := a + 1;

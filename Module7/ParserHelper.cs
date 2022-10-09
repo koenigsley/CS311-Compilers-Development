@@ -3,7 +3,6 @@ using System;
 
 namespace SimpleParser
 {
-
     public enum type { tint, tdouble };
 
     public static class SymbolTable // Таблица символов

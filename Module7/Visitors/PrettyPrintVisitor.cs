@@ -60,8 +60,10 @@ namespace SimpleLang.Visitors
 
             var Count = bl.StList.Count;
 
-            if (Count>0)
+            if (Count > 0)
+            {
                 bl.StList[0].Visit(this);
+            }
             for (var i = 1; i < Count; i++)
             {
                 Text += ';';
@@ -83,6 +85,34 @@ namespace SimpleLang.Visitors
             Text += IndentStr() + "var " + w.vars[0].Name;
             for (int i = 1; i < w.vars.Count; i++)
                 Text += ',' + w.vars[i].Name;
+        }
+
+        public override void VisitIfNode(IfNode i)
+        {
+            Text += IndentStr() + "if ";
+            i.Expr.Visit(this);
+            Text += $" then{Environment.NewLine}";
+            VisitIfsStatement(i.Stat1);
+
+            if (i.Stat2 != null)
+            {
+                Text +=  $"{Environment.NewLine}{IndentStr()}else{Environment.NewLine}";
+                VisitIfsStatement(i.Stat2);
+            }
+        }
+
+        private void VisitIfsStatement(StatementNode stat)
+        {
+            if (!(stat is BlockNode))
+            {
+                IndentPlus();
+                stat.Visit(this);
+                IndentMinus();
+            }
+            else
+            {
+                stat.Visit(this);
+            }
         }
     }
 }
