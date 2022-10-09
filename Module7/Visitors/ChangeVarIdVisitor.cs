@@ -8,13 +8,45 @@ namespace SimpleLang.Visitors
 {
     public class ChangeVarIdVisitor : AutoVisitor
     {
-        private string from, to;
+        private string _from, _to;
+        private HashSet<string> _vars = new HashSet<string>();
 
-        public ChangeVarIdVisitor(string _from, string _to)
+        public ChangeVarIdVisitor(string from, string to)
         {
-            from = _from;
-            to = _to;
+            _from = from;
+            _to = to;
         }
-       
+
+        public override void VisitVarDefNode(VarDefNode w)
+        {
+            w.vars.ForEach(v => Add(v.Name));
+            base.VisitVarDefNode(w);
+        }
+
+        public override void VisitIdNode(IdNode id)
+        {
+            if (IsVar(id.Name))
+            {
+                RenameIfNeeded(id);
+            }
+        }
+
+        private void Add(string varName)
+        {
+            _vars.Add(varName);
+        }
+
+        private bool IsVar(string idName)
+        {
+            return _vars.Contains(idName);
+        }
+
+        private void RenameIfNeeded(IdNode id)
+        {
+            if (id.Name == _from)
+            {
+                id.Name = _to;
+            }
+        }
     }
 }
