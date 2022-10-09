@@ -72,7 +72,7 @@ expr2   : expr3 { $$ = $1; }
         | expr2 DIV expr3 { $$ = new BinaryNode($1, $3, '/'); }
         ;
 
-expr3   : ident { $$ = $1; }
+expr3   : ident { $$ = $1 as IdNode; }
         | INUM { $$ = new IntNumNode($1); }
         | LPAR expr RPAR { $$ = $2; }
         ;

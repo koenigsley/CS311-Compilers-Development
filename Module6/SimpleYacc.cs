@@ -4,7 +4,7 @@
 
 // GPPG version 1.3.6
 // Machine:  DESKTOP-BR3L60F
-// DateTime: 09.10.2022 1:45:30
+// DateTime: 09.10.2022 12:54:08
 // UserName: Mike
 // Input file <SimpleYacc.y>
 
@@ -247,7 +247,7 @@ public class Parser: ShiftReduceParser<ValueType, LexLocation>
 { CurrentSemanticValue.eVal = new BinaryNode(ValueStack[ValueStack.Depth-3].eVal, ValueStack[ValueStack.Depth-1].eVal, '/'); }
         break;
       case 22: // expr3 -> ident
-{ CurrentSemanticValue.eVal = ValueStack[ValueStack.Depth-1].eVal; }
+{ CurrentSemanticValue.eVal = ValueStack[ValueStack.Depth-1].eVal as IdNode; }
         break;
       case 23: // expr3 -> INUM
 { CurrentSemanticValue.eVal = new IntNumNode(ValueStack[ValueStack.Depth-1].iVal); }

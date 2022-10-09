@@ -2,6 +2,9 @@ begin
   b := 2;
   a := 3;
   a := b;
+
+  x := (x+3/2)*2;
+
   cycle 3
   begin
     a := c;
