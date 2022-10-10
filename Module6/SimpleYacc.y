@@ -96,10 +96,7 @@ write   : WRITE LPAR expr RPAR { $$ = new WriteNode($3); }
         ;
 
 if      : IF expr THEN statement { $$ = new IfNode($2, $4); }
-        | if ELSE statement { 
-		    ($1 as IfNode).Stat2 = $3;
-		    $$ = $1; 
-		}
+        | IF expr THEN statement ELSE statement { $$ = new IfNode($2, $4, $6); }
 		;
 
 var     : VAR ident { $$ = new VarDefNode($2 as IdNode); }
