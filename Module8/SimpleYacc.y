@@ -24,7 +24,7 @@
 
 %start progr
 
-%token BEGIN END CYCLE ASSIGN ASSIGNPLUS ASSIGNMINUS ASSIGNMULT SEMICOLON WRITE VAR PLUS MINUS MULT DIV LPAREN RPAREN COLUMN
+%token BEGIN END CYCLE ASSIGN ASSIGNPLUS ASSIGNMINUS ASSIGNMULT SEMICOLON WRITE VAR PLUS MINUS MULT DIV MOD LPAREN RPAREN COLUMN
 %token <iVal> INUM 
 %token <dVal> RNUM 
 %token <sVal> ID
@@ -79,6 +79,7 @@ expr	: expr PLUS T { $$ = new BinOpNode($1,$3,'+'); }
 		
 T 		: T MULT F { $$ = new BinOpNode($1,$3,'*'); }
 		| T DIV F { $$ = new BinOpNode($1,$3,'/'); }
+		| T MOD F { $$ = new BinOpNode($1,$3,'%'); }
 		| F { $$ = $1; }
 		;
 		
@@ -116,4 +117,3 @@ varlist	: ident
 		;
 	
 %%
-

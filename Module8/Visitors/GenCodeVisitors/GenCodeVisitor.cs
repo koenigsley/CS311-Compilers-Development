@@ -44,6 +44,9 @@ namespace SimpleLang.Visitors
                 case '/':
                     genc.Emit(OpCodes.Div);
                     break;
+                case '%':
+                    genc.Emit(OpCodes.Rem);
+                    break;
             }
         }
         public override void VisitAssignNode(AssignNode a) 

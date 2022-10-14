@@ -39,6 +39,7 @@ ID {Alpha}{AlphaDigit}*
 "-" { return (int)Tokens.MINUS; }
 "*" { return (int)Tokens.MULT; }
 "/" { return (int)Tokens.DIV; }
+"%" { return (int)Tokens.MOD; }
 "(" { return (int)Tokens.LPAREN; }
 ")" { return (int)Tokens.RPAREN; }
 "," { return (int)Tokens.COLUMN; }
