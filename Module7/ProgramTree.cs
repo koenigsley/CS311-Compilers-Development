@@ -149,14 +149,10 @@ namespace ProgramTree
         public StatementNode Stat1 { get; set; }
         public StatementNode Stat2 { get; set; }
 
-        public IfNode(ExprNode expr, StatementNode stat1)
+        public IfNode(ExprNode expr, StatementNode stat1, StatementNode stat2 = null)
         {
             Expr = expr;
             Stat1 = stat1;
-        }
-
-        public IfNode(ExprNode expr, StatementNode stat1, StatementNode stat2) : this(expr, stat1)
-        {
             Stat2 = stat2;
         }
 
