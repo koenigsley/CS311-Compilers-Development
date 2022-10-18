@@ -115,11 +115,11 @@ namespace SimpleLang.Visitors
 
             genc.MarkLabel(beginWhile);
 
-            w.Expr.Visit(this);
+            w.Expr.Visit(this);  // вычислить предусловие
             genc.Emit(OpCodes.Ldc_I4_0);
-            genc.Emit(OpCodes.Beq, endWhile);
+            genc.Emit(OpCodes.Beq, endWhile);  // проверить предусловие
 
-            w.Stat.Visit(this);
+            w.Stat.Visit(this);  // выполнить тело цикла
             genc.Emit(OpCodes.Br, beginWhile);
 
             genc.MarkLabel(endWhile);
