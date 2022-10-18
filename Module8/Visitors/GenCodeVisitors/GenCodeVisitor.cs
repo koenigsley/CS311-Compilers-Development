@@ -9,23 +9,27 @@ namespace SimpleLang.Visitors
 {
     public class GenCodeVisitor: Visitor
     {
-        private Dictionary<string, LocalBuilder> vars = new Dictionary<string, LocalBuilder>();
+        private Dictionary<string, LocalBuilder> vars;
         private GenCodeCreator genc;
 
         public GenCodeVisitor()
         {
+            vars = new Dictionary<string, LocalBuilder>();
             genc = new GenCodeCreator();
         }
+
         public override void VisitIdNode(IdNode id) 
         {
             // Этот Visit не вызывается если переменная стоит слева от оператора присваивания !
             // Т.е. он вызывается только если id находится в выражении, а значит, мы просто кладем его значение на стек!
             genc.Emit(OpCodes.Ldloc, vars[id.Name]);
         }
+
         public override void VisitIntNumNode(IntNumNode num) 
         {
             genc.Emit(OpCodes.Ldc_I4, num.Num);
         }
+
         public override void VisitBinOpNode(BinOpNode binop) 
         {
             binop.Left.Visit(this);
@@ -49,19 +53,21 @@ namespace SimpleLang.Visitors
                     break;
             }
         }
+
         public override void VisitAssignNode(AssignNode a) 
         {
             a.Expr.Visit(this);
             genc.Emit(OpCodes.Stloc, vars[a.Id.Name]);
         }
+
         public override void VisitCycleNode(CycleNode c) 
         {
             var i = genc.DeclareLocal(typeof(int)); // переменная цикла cycle
             c.Expr.Visit(this); // сгенерировать команды, связанные с вычислением количества итераций цикла
             genc.Emit(OpCodes.Stloc, i); // i := кво итераций
 
-            Label startLoop = genc.DefineLabel();
-            Label endLoop = genc.DefineLabel();
+            var startLoop = genc.DefineLabel();
+            var endLoop = genc.DefineLabel();
             
             genc.MarkLabel(startLoop);
 
@@ -80,11 +86,40 @@ namespace SimpleLang.Visitors
 
             genc.MarkLabel(endLoop);
         }
+
+        public override void VisitIfNode(IfNode cond)
+        {
+            var condition = genc.DeclareLocal(typeof(int));
+            cond.expr.Visit(this);
+            genc.Emit(OpCodes.Stloc, condition);
+
+            var ifFalse = genc.DefineLabel();
+            var endIf = genc.DefineLabel();
+
+            genc.Emit(OpCodes.Ldloc, condition);
+            genc.Emit(OpCodes.Ldc_I4_0);
+            genc.Emit(OpCodes.Beq, ifFalse);
+
+            cond.ifTrue.Visit(this);
+            genc.Emit(OpCodes.Br, endIf);
+
+            genc.MarkLabel(ifFalse);
+            if (cond.ifFalse != null)
+            {
+                cond.ifFalse.Visit(this);
+            }
+
+            genc.MarkLabel(endIf);
+        }
+
         public override void VisitBlockNode(BlockNode bl) 
         {
             foreach (var st in bl.StList)
+            {
                 st.Visit(this);
+            }
         }
+
         public override void VisitWriteNode(WriteNode w) 
         {
             w.Expr.Visit(this);
@@ -94,7 +129,9 @@ namespace SimpleLang.Visitors
         public override void VisitVarDefNode(VarDefNode w) 
         {
             foreach (var v in w.vars)
+            {
                 vars[v.Name] = genc.DeclareLocal(typeof(int));
+            }
         }
 
         public void EndProgram()
@@ -110,7 +147,9 @@ namespace SimpleLang.Visitors
         public void PrintCommands()
         {
             foreach (var s in genc.commands)
+            {
                 Console.WriteLine(s);
+            }
         }
     }
 }

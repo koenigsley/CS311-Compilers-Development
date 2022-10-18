@@ -11,7 +11,7 @@ namespace SimpleLang.Visitors
     {
         private DynamicMethod dyn;
         private ILGenerator gen;
-        private bool write_commands = true;
+        private bool writeCommands = true;
         private static MethodInfo writeLineInt = typeof(Console).GetMethod("WriteLine", new Type[] { typeof(int) });
 
         public List<string> commands = new List<string>();
@@ -25,60 +25,75 @@ namespace SimpleLang.Visitors
         public void Emit(OpCode op)
         {
             gen.Emit(op);
-            if (write_commands)
+            if (writeCommands)
+            {
                 commands.Add(op.ToString());
+            }
         }
 
         public void Emit(OpCode op, int num)
         {
             gen.Emit(op,num);
-            if (write_commands)
+            if (writeCommands)
+            {
                 commands.Add(op.ToString() + " " + num);
+            }
         }
 
-        public void Emit(OpCode op, LocalBuilder lb)
+        public void Emit(OpCode opCode, LocalBuilder localVariable)
         {
-            gen.Emit(op, lb);
-            if (write_commands)
-                commands.Add(op.ToString() + " var" + lb.LocalIndex);
+            gen.Emit(opCode, localVariable);
+            if (writeCommands)
+            {
+                commands.Add(opCode.ToString() + " var" + localVariable.LocalIndex);
+            }
         }
 
-        public void Emit(OpCode op, Label l)
+        public void Emit(OpCode op, Label label)
         {
-            gen.Emit(op, l);
-            if (write_commands)
-                commands.Add(op.ToString() + " Label" + l.GetHashCode());
+            gen.Emit(op, label);
+            if (writeCommands)
+            {
+                commands.Add(op.ToString() + " Label" + label.GetHashCode());
+            }
         }
 
-        public LocalBuilder DeclareLocal(Type t)
+        public LocalBuilder DeclareLocal(Type type)
         {
-            var lb = gen.DeclareLocal(t);
-            if (write_commands)
-                commands.Add("DeclareLocal " + "var" + lb.LocalIndex + ": " + t);
-            return lb;
+            var localVariable = gen.DeclareLocal(type);
+            if (writeCommands)
+            {
+                commands.Add("DeclareLocal " + "var" + localVariable.LocalIndex + ": " + type);
+            }
+            return localVariable;
         }
 
         public Label DefineLabel()
         {
-            var l = gen.DefineLabel();
-            if (write_commands)
-                commands.Add("DefineLabel" + " Label" + l.GetHashCode());
-
-            return l;
+            var label = gen.DefineLabel();
+            if (writeCommands)
+            {
+                commands.Add("DefineLabel" + " Label" + label.GetHashCode());
+            }
+            return label;
         }
 
-        public void MarkLabel(Label l)
+        public void MarkLabel(Label label)
         {
-            gen.MarkLabel(l);
-            if (write_commands)
-                commands.Add("MarkLabel" + " Label" + l.GetHashCode());
+            gen.MarkLabel(label);
+            if (writeCommands)
+            {
+                commands.Add("MarkLabel" + " Label" + label.GetHashCode());
+            }
         }
 
         public void EmitWriteLine()
         {
             gen.Emit(OpCodes.Call, writeLineInt);
-            if (write_commands)
+            if (writeCommands)
+            {
                 commands.Add("WriteLine");
+            }
         }
 
         public void EndProgram()
@@ -93,12 +108,12 @@ namespace SimpleLang.Visitors
 
         public void WriteCommandsOn()
         {
-            write_commands = true;
+            writeCommands = true;
         }
 
         public void WriteCommandsOff()
         {
-            write_commands = false;
+            writeCommands = false;
         }
     }
 }
