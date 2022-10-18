@@ -145,19 +145,37 @@ namespace ProgramTree
 
     public class IfNode : StatementNode
     {
-        public ExprNode expr;
-        public StatementNode ifTrue, ifFalse;
+        public ExprNode Expr { get; set; }
+        public StatementNode IfTrue { get; set; }
+        public StatementNode IfFalse { get; set; }
 
         public IfNode(ExprNode expr, StatementNode ifTrue, StatementNode ifFalse = null)
         {
-            this.expr = expr;
-            this.ifTrue = ifTrue;
-            this.ifFalse = ifFalse;
+            Expr = expr;
+            IfTrue = ifTrue;
+            IfFalse = ifFalse;
         }
 
         public override void Visit(Visitor v)
         {
             v.VisitIfNode(this);
+        }
+    }
+
+    public class WhileNode : StatementNode
+    {
+        public ExprNode Expr;
+        public StatementNode Stat;
+
+        public WhileNode(ExprNode expr, StatementNode stat)
+        {
+            Expr = expr;
+            Stat = stat;
+        }
+
+        public override void Visit(Visitor v)
+        {
+            v.VisitWhileNode(this);
         }
     }
 }

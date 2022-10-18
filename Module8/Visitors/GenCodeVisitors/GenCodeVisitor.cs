@@ -66,10 +66,10 @@ namespace SimpleLang.Visitors
             c.Expr.Visit(this); // сгенерировать команды, связанные с вычислением количества итераций цикла
             genc.Emit(OpCodes.Stloc, i); // i := кво итераций
 
-            var startLoop = genc.DefineLabel();
+            var beginLoop = genc.DefineLabel();
             var endLoop = genc.DefineLabel();
             
-            genc.MarkLabel(startLoop);
+            genc.MarkLabel(beginLoop);
 
             genc.Emit(OpCodes.Ldloc, i); 
             genc.Emit(OpCodes.Ldc_I4_0);
@@ -82,7 +82,7 @@ namespace SimpleLang.Visitors
             genc.Emit(OpCodes.Sub);
             genc.Emit(OpCodes.Stloc, i); // i := i - 1;
 
-            genc.Emit(OpCodes.Br, startLoop);
+            genc.Emit(OpCodes.Br, beginLoop);
 
             genc.MarkLabel(endLoop);
         }
@@ -90,7 +90,7 @@ namespace SimpleLang.Visitors
         public override void VisitIfNode(IfNode cond)
         {
             var condition = genc.DeclareLocal(typeof(int));
-            cond.expr.Visit(this);
+            cond.Expr.Visit(this);
             genc.Emit(OpCodes.Stloc, condition);
 
             var ifFalse = genc.DefineLabel();
@@ -100,16 +100,33 @@ namespace SimpleLang.Visitors
             genc.Emit(OpCodes.Ldc_I4_0);
             genc.Emit(OpCodes.Beq, ifFalse);
 
-            cond.ifTrue.Visit(this);
+            cond.IfTrue.Visit(this);
             genc.Emit(OpCodes.Br, endIf);
 
             genc.MarkLabel(ifFalse);
-            if (cond.ifFalse != null)
+            if (cond.IfFalse != null)
             {
-                cond.ifFalse.Visit(this);
+                cond.IfFalse.Visit(this);
             }
 
             genc.MarkLabel(endIf);
+        }
+
+        public override void VisitWhileNode(WhileNode w)
+        {
+            var beginWhile = genc.DefineLabel();
+            var endWhile = genc.DefineLabel();
+
+            genc.MarkLabel(beginWhile);
+
+            w.Expr.Visit(this);
+            genc.Emit(OpCodes.Ldc_I4_0);
+            genc.Emit(OpCodes.Beq, endWhile);
+
+            w.Stat.Visit(this);
+            genc.Emit(OpCodes.Br, beginWhile);
+
+            genc.MarkLabel(endWhile);
         }
 
         public override void VisitBlockNode(BlockNode bl) 

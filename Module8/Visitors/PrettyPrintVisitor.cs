@@ -87,19 +87,19 @@ namespace SimpleLang.Visitors
         public override void VisitIfNode(IfNode cond)
         {
             Text += IndentStr() + "if ";
-            cond.expr.Visit(this);
+            cond.Expr.Visit(this);
             Text += " then ";
             Text += Environment.NewLine;
             IndentPlus();
-            cond.ifTrue.Visit(this);
+            cond.IfTrue.Visit(this);
             IndentMinus();
-            if (null != cond.ifFalse)
+            if (null != cond.IfFalse)
             {
                 Text += Environment.NewLine;
                 Text += IndentStr() + "else ";
                 Text += Environment.NewLine;
                 IndentPlus();
-                cond.ifFalse.Visit(this);
+                cond.IfFalse.Visit(this);
                 IndentMinus();
             }
         }
