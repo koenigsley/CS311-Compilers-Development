@@ -89,14 +89,10 @@ namespace SimpleLang.Visitors
 
         public override void VisitIfNode(IfNode cond)
         {
-            var condition = genc.DeclareLocal(typeof(int));
-            cond.Expr.Visit(this);
-            genc.Emit(OpCodes.Stloc, condition);
-
             var ifFalse = genc.DefineLabel();
             var endIf = genc.DefineLabel();
 
-            genc.Emit(OpCodes.Ldloc, condition);
+            cond.Expr.Visit(this);
             genc.Emit(OpCodes.Ldc_I4_0);
             genc.Emit(OpCodes.Beq, ifFalse);
 
