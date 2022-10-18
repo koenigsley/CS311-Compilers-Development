@@ -29,5 +29,7 @@ namespace SimpleLang.Visitors
         public virtual void VisitIfNode(IfNode cond) { }
 
         public virtual void VisitWhileNode(WhileNode w) { }
+
+        public virtual void VisitRepeatNode(RepeatNode r) { }
     }
 }

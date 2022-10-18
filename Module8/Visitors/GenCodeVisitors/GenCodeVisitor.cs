@@ -125,6 +125,23 @@ namespace SimpleLang.Visitors
             genc.MarkLabel(endWhile);
         }
 
+        public override void VisitRepeatNode(RepeatNode r)
+        {
+            var beginRepeat = genc.DefineLabel();
+            var endRepeat = genc.DefineLabel();
+
+            genc.MarkLabel(beginRepeat);
+
+            r.Stat.Visit(this);  // выполнить тело цикла
+
+            r.Expr.Visit(this);  // вычислить постусловие
+            genc.Emit(OpCodes.Ldc_I4_0);
+            genc.Emit(OpCodes.Beq, endRepeat);  // проверить постусловие
+            genc.Emit(OpCodes.Br, beginRepeat);
+
+            genc.MarkLabel(endRepeat);
+        }
+
         public override void VisitBlockNode(BlockNode bl) 
         {
             foreach (var st in bl.StList)

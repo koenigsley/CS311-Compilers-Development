@@ -178,4 +178,21 @@ namespace ProgramTree
             v.VisitWhileNode(this);
         }
     }
+
+    public class RepeatNode : StatementNode
+    {
+        public StatementNode Stat;
+        public ExprNode Expr;
+
+        public RepeatNode(StatementNode stat, ExprNode expr)
+        {
+            Stat = stat;
+            Expr = expr;
+        }
+
+        public override void Visit(Visitor v)
+        {
+            v.VisitRepeatNode(this);
+        }
+    }
 }

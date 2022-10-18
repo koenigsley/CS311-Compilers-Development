@@ -18,4 +18,16 @@ begin
   write(b);
   write(c);
   write(d);
+  a := 10;
+  repeat
+  begin
+    a := a - 1;
+  end
+  until a;
+
+  a := 10;
+  while a do
+  begin
+    a := a - 1;
+  end
 end

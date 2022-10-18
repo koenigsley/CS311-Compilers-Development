@@ -24,13 +24,13 @@
 
 %start progr
 
-%token BEGIN END CYCLE ASSIGN ASSIGNPLUS ASSIGNMINUS ASSIGNMULT SEMICOLON WRITE VAR PLUS MINUS MULT DIV MOD LPAREN RPAREN COLUMN IF THEN ELSE WHILE DO
+%token BEGIN END CYCLE ASSIGN ASSIGNPLUS ASSIGNMINUS ASSIGNMULT SEMICOLON WRITE VAR PLUS MINUS MULT DIV MOD LPAREN RPAREN COLUMN IF THEN ELSE WHILE DO REPEAT UNTIL
 %token <iVal> INUM 
 %token <dVal> RNUM 
 %token <sVal> ID
 
 %type <eVal> expr ident T F 
-%type <stVal> statement assign block cycle write empty var varlist if while
+%type <stVal> statement assign block cycle write empty var varlist if while repeat
 %type <blVal> stlist block
 
 %%
@@ -57,6 +57,7 @@ statement: assign { $$ = $1; }
 		| empty   { $$ = $1; }
 		| if      { $$ = $1; }
 		| while   { $$ = $1; }
+		| repeat  { $$ = $1; }
 		;
 
 empty	: { $$ = new EmptyNode(); }
@@ -123,6 +124,9 @@ if      : IF expr THEN statement { $$ = new IfNode($2, $4); }
 		;
 
 while   : WHILE expr DO statement { $$ = new  WhileNode($2, $4); }
+        ;
+
+repeat  : REPEAT stlist UNTIL expr { $$ = new RepeatNode($2, $4); }
         ;
 	
 %%

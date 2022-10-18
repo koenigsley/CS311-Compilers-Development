@@ -62,5 +62,11 @@ namespace SimpleLang.Visitors
             w.Expr.Visit(this);
             w.Stat.Visit(this);
         }
+
+        public override void VisitRepeatNode(RepeatNode r)
+        {
+            r.Stat.Visit(this);
+            r.Expr.Visit(this);
+        }
     }
 }
