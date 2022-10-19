@@ -73,7 +73,7 @@ for     : FOR ident ASSIGN expr TO expr DO statement
         ;
 
 if      : IF expr THEN statement
-        | if ELSE statement
+        | IF expr THEN statement ELSE statement
 		;
 
 write   : WRITE LPAR expr RPAR
