@@ -92,7 +92,7 @@ namespace TestCodeGenerator
         [Test]
         public void TestUntil()
         {
-            Assert.AreEqual("1024", TestHelper.GenerateNRun(@"begin var a3,b3; b3:=1; a3:=10; repeat a3:=a3-1; b3:=b3*2 until a3; write(b3) end"));
+            Assert.AreEqual("1024", TestHelper.GenerateNRun(@"begin var a3,b3,c3; a3:=0; b3:=1; c3:=10; repeat a3:=a3+1; b3:=b3*2 until a3/c3; write(b3) end"));
         }
     }
 }
