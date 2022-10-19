@@ -128,7 +128,6 @@ namespace SimpleLang.Visitors
         public override void VisitRepeatNode(RepeatNode r)
         {
             var beginRepeat = genc.DefineLabel();
-            var endRepeat = genc.DefineLabel();
 
             genc.MarkLabel(beginRepeat);
 
@@ -136,15 +135,7 @@ namespace SimpleLang.Visitors
 
             r.Expr.Visit(this);  // вычислить постусловие
             genc.Emit(OpCodes.Ldc_I4_0);
-            /*
-              вообще переход должен осуществляться к метке beginRepeat
-              но тест составлен криво
-              поэтому цикл repeat until работает как цикл do while
-             */
-            genc.Emit(OpCodes.Beq, endRepeat);  // проверить постусловие
-            genc.Emit(OpCodes.Br, beginRepeat);
-
-            genc.MarkLabel(endRepeat);
+            genc.Emit(OpCodes.Beq, beginRepeat);  // проверить постусловие
         }
 
         public override void VisitBlockNode(BlockNode bl) 
