@@ -137,6 +137,7 @@ namespace ProgramTree
         {
             vars.Add(id);
         }
+
         public override void Visit(Visitor v)
         {
             v.VisitVarDefNode(this);
